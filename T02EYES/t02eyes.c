@@ -78,7 +78,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     hDCFrame = CreateCompatibleDC(hDC);
     ReleaseDC(hWnd, hDC);
 
-    SetTimer(hWnd, 47, 35, NULL);
+    SetTimer(hWnd, 47, 10, NULL);
     return 0;
   case WM_TIMER:  
     GetCursorPos(&pt);
@@ -87,10 +87,14 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     SelectObject(hDCFrame, GetStockObject(DC_BRUSH));
     SelectObject(hDCFrame, hPen);
     Rectangle(hDCFrame, 0, 0, w, h);
-    DrawEye(hDCFrame, w / 2, h / 2, 200, 30, pt.x, pt.y);
+    DrawEye(hDCFrame, w / 4, h / 4, 100, 30, pt.x, pt.y);
+    DrawEye(hDCFrame, 3 * w / 4, 3 * h / 4, 100, 30, pt.x, pt.y);
+    DrawEye(hDCFrame, 3 * w / 4, h / 4, 100, 30, pt.x, pt.y);
+    DrawEye(hDCFrame, w / 4, 3 * h / 4, 100, 30, pt.x, pt.y);
     SelectObject(hDCFrame, GetStockObject(DC_PEN));
+    SelectObject(hDCFrame, GetStockObject(DC_BRUSH));
     DeleteObject(hPen);
-    InvalidateRect(hWnd, NULL, 0);
+    InvalidateRect(hWnd, NULL, FALSE);
     return 0;
   case WM_SIZE:
     w = LOWORD(lParam);
@@ -114,6 +118,8 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     KillTimer(hWnd, 47);
     PostQuitMessage(0);
     return 0;
+  case WM_ERASEBKGND:
+    return 1; 
   }
   return DefWindowProc(hWnd, Msg, wParam, lParam);
 }
@@ -144,6 +150,8 @@ VOID DrawEye( HDC hDC, INT X, INT Y, INT R, INT R1, INT Mx, INT My )
   else
     Ellipse(hDC, Mx - R1, My - R1, Mx + R1, My + R1);
 
+  SelectObject(hDC, GetStockObject(DC_PEN));
+  SelectObject(hDC, GetStockObject(DC_BRUSH));
   DeleteObject(hPen);
   DeleteObject(hBr);
 }
