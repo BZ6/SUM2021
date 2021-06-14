@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <windows.h>
 
-#define MAX 10
+#define MAX 4
 INT p[MAX];
 BOOL IsParity = TRUE;
 

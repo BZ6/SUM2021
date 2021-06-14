@@ -1,7 +1,7 @@
 /* FILE NAME: t04perm.c
  * PROGRAMMER: BZ6
  * DATE: 12.06.2021
- * PURPOSE: Inversion.
+ * PURPOSE: Determinant.
  */
 
 #include <stdio.h>
@@ -41,6 +41,12 @@ BOOL LoadMatrix( CHAR *FileName )
   return TRUE;
 }
 
+/* The output function.
+ * ARGUMENTS:
+ *      VOID;
+ * RETURNS:
+ *      VOID.
+ */
 VOID Store( CHAR *FileName )
 {
   FILE *F;
@@ -50,16 +56,29 @@ VOID Store( CHAR *FileName )
     return;
   fprintf(F, "Determinant of matrix: %f\n", Det);
   fclose(F);
-}
+} /* End of 'Store' function */
 
+/* The fill massive function.
+ * ARGUMENTS:
+ *      VOID;
+ * RETURNS:
+ *      VOID.
+ */
 VOID Fill( VOID )
 {
   INT i;
 
   for (i = 0; i < N; i++)
     p[i] = i;
-}
+} /* End of 'Fill' function */
 
+/* The swap function.
+ * ARGUMENTS:
+ *   - 2 numbers for swap:
+ *      INT *A, *B;
+ * RETURNS:
+ *      VOID.
+ */
 VOID Swap( INT *A, INT *B )
 {
   INT tmp = *A;
@@ -67,7 +86,7 @@ VOID Swap( INT *A, INT *B )
   *A = *B;
   *B = tmp;
   IsParity = !IsParity;
-}
+} /* End of 'Swap' function */
 
 /* The permutation program function.
  * ARGUMENTS:

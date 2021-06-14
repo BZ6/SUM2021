@@ -1,5 +1,9 @@
-/* t03clock.c
+/* FILE NAME: pattern.c
+ * PROGRAMMER: BZ6
+ * DATE: 12.06.2021
+ * PURPOSE: WinAPI application sample.
  */
+
 #include <windows.h>
 #include <math.h>
 #include <stdio.h>
@@ -7,13 +11,27 @@
 
 #pragma warning(disable: 4244)
 
+/* Window class name */
 #define WND_CLASS_NAME "my window"
 
+/* Forward declaration */
 LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
                                WPARAM wParam, LPARAM lParam);
-
 VOID DrawHand( HDC hDC, INT x, INT y, INT l, INT w, DOUBLE a );
 
+/* The main program function.
+ * ARGUMENTS:
+ *   - handle of application instance:
+ *       HINSTANCE hInstance;
+ *   - dummy handle of previous application instance (not used):
+ *       HINSTANCE hPrevInstance;
+ *   - command line string:
+ *       CHAR *CmdLine;
+ *   - show window command parameter (see SW_***):
+ *       INT CmdShow;
+ * RETURNS:
+ *   (INT) Error level for operation system (0 for success).
+ */
 INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, 
                     CHAR *CmdLine, INT ShowCmd )
 {
@@ -21,7 +39,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   HWND hWnd;
   MSG Msg;
 
-  /* */
+  /* Fill window class structure */
   wc.style = CS_VREDRAW | CS_HREDRAW;
   wc.cbClsExtra = 0;
   wc.cbWndExtra = 0;
@@ -33,13 +51,13 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   wc.lpfnWndProc = MyWindowFunc;
   wc.lpszClassName = WND_CLASS_NAME;
 
-  /**/
+  /* Register window class */
   if (!RegisterClass(&wc))
   {
     MessageBox(NULL, "Error register window class", "ERROR", MB_OK | MB_ICONERROR);
     return(0);
   }
-  /**/
+  /* Window creation */
   hWnd =
     CreateWindow(WND_CLASS_NAME,
       "Title",
@@ -50,18 +68,32 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
       NULL,
       hInstance,
       NULL);
-  /**/
+
   ShowWindow(hWnd, ShowCmd);
   UpdateWindow(hWnd);
 
+  /* Message loop */
   while (GetMessage(&Msg, NULL, 0, 0))
   {
     TranslateMessage(&Msg);
     DispatchMessage(&Msg);
   }
   return 30;
-}
+} /* End of 'WinMain' function */
 
+/* Window handle function.
+ * ARGUMENTS:
+ *   - window handle:
+ *      HWND hWnd;
+ *   - message type (see WM_***):
+ *      UINT Msg;
+ *   - message 'word' parameter:
+ *      WPARAM wParam;
+ *   - message 'long' parameter:
+ *      LPARAM lParam;
+ * RETURNS:
+ *   (LRESULT) message depende return value.
+ */
 LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
                                WPARAM wParam, LPARAM lParam)
 {
@@ -95,6 +127,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     GetObject(hBmAnd, sizeof(BITMAP), &bmIc);
     SetTimer(hWnd, 47, 10, NULL);
     return 0;
+
   case WM_TIMER:  
     GetLocalTime(&st);
     SelectObject(hDCFrame, GetStockObject(WHITE_PEN));
@@ -118,18 +151,14 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     SelectObject(hDCFrame, hPen); 
     a = (st.wHour % 12 + st.wMinute / 60.0) * 2 * pi / 12;
     DrawHand(hDCFrame,  w / 2, h / 2, r / 9, r / 50, a);
-
     hFnt = CreateFont(211, 0, 50, 0, FW_BOLD,
              FALSE, FALSE, FALSE, RUSSIAN_CHARSET, 
              OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, 
              PROOF_QUALITY, FIXED_PITCH | FF_ROMAN, 
-             "Times");
-           
+             "Times");        
     TextOut(hDCFrame, 0, 0, Buf, sprintf(Buf, "%02d.%02d.%02d", st.wDay, st.wMonth, st.wYear));
-
     GetCursorPos(&pt);
     ScreenToClient(hWnd, &pt); 
-
     SelectObject(hDCIcon, hBmAnd);
     BitBlt(hDCFrame, pt.x - bmIc.bmWidth / 2, pt.y - bmIc.bmHeight / 2, bmIc.bmWidth, bmIc.bmHeight, hDCIcon, 0, 0, SRCAND);
     SelectObject(hDCIcon, hBmXor);
@@ -146,13 +175,13 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
       SelectObject(hDCIcon, hBmXor);
       BitBlt(hDCFrame, pt.x - bmIc.bmWidth / 2, pt.y - bmIc.bmHeight / 2, bmIc.bmWidth, bmIc.bmHeight, hDCIcon, 0, 0, SRCINVERT);
     }
-
     SelectObject(hDCFrame, GetStockObject(DC_PEN));
     SelectObject(hDCFrame, GetStockObject(DC_BRUSH));
     DeleteObject(hFnt);
     DeleteObject(hPen);  
     InvalidateRect(hWnd, NULL, FALSE);
     return 0;
+
   case WM_SIZE:
     w = LOWORD(lParam);
     h = HIWORD(lParam);
@@ -164,12 +193,13 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     SelectObject(hDCFrame, hBm);
     SendMessage(hWnd, WM_TIMER, 0, 0);
     return 0;
+
   case WM_PAINT:
     hDC = BeginPaint(hWnd, &ps);
-
     BitBlt(hDC, 0, 0, w, h, hDCFrame, 0, 0, SRCCOPY);
     EndPaint(hWnd, &ps);
     return 0;
+
   case WM_DESTROY:
     DeleteObject(hBm);
     DeleteObject(hBmLogo);
@@ -181,13 +211,26 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     KillTimer(hWnd, 47);
     PostQuitMessage(0);
     return 0;
+
   case WM_ERASEBKGND:
     return 1; 
   }
   return DefWindowProc(hWnd, Msg, wParam, lParam);
-}
+} /* End of 'WinFunc' function */
 
-
+/* Window handle function.
+ * ARGUMENTS:
+ *   - window handle descriptor:
+ *      HDC hDC;
+ *   - coordinetes of center:
+ *      INT x, y;
+ *   - size of hand:
+ *      INT l, w;
+ *   - anle in radians:
+ *      DOUBLE a;
+ * RETURNS:
+ *   VOID.
+ */
 VOID DrawHand( HDC hDC, INT x, INT y, INT l, INT w, DOUBLE a )
 {
   POINT pnts[4];
@@ -203,6 +246,6 @@ VOID DrawHand( HDC hDC, INT x, INT y, INT l, INT w, DOUBLE a )
   pnts[3].y = y + w * s;
 
   Polygon(hDC, pnts, 4);
-}
+} /* End of 'DrawHand' function */
 
 /* END OF 't03clock.c' FILE*/
