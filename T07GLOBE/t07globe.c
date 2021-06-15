@@ -1,11 +1,12 @@
-  /* FILE NAME: t07globe.c
+/* FILE NAME: t07globe.c
  * PROGRAMMER: BZ6
- * DATE: 14.06.2021
+ * DATE: 15.06.2021
  * PURPOSE: WinAPI application sample.
  */
 
-#include "globe.h"
+#include <stdio.h>
 #include <math.h>
+#include "globe.h"
 
 /* Window class name */
 #define WND_CLASS_NAME "my window"
@@ -64,11 +65,16 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   UpdateWindow(hWnd);
 
   /* Message loop */
-  while (GetMessage(&Msg, NULL, 0, 0))
-  {
-    TranslateMessage(&Msg);
-    DispatchMessage(&Msg);
-  }
+  while (TRUE)
+    if (PeekMessage(&Msg, NULL, 0, 0, PM_REMOVE))
+    {
+      if (Msg.message == WM_QUIT)
+        break;
+      DispatchMessage(&Msg);
+    }
+    else
+      SendMessage(hWnd, WM_TIMER, 30, 0);
+
   return 30;
 } /* End of 'WinMain' function */
 
@@ -90,6 +96,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
 {
   PAINTSTRUCT ps;
   HDC hDC;
+  CHAR Buf[15];
   static BITMAP bm;
   static INT w, h;
   static HDC hDCFrame;
@@ -101,7 +108,8 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     hDC = GetDC(hWnd);
     hDCFrame = CreateCompatibleDC(hDC);
     ReleaseDC(hWnd, hDC);
-    SetTimer(hWnd, 47, 10, NULL);
+    GLB_TimerInit();
+    SetTimer(hWnd, 47, 1, NULL);
     return 0;
 
   case WM_SIZE:
@@ -118,11 +126,15 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     return 0;
 
   case WM_TIMER:  
+    GLB_TimerResponse();
     SelectObject(hDCFrame, GetStockObject(WHITE_PEN));
     Rectangle(hDCFrame, 0, 0, w, h);
     SelectObject(hDCFrame, GetStockObject(DC_PEN));  
     GlobeDraw( hDCFrame, 300);
-    InvalidateRect(hWnd, NULL, FALSE);
+    TextOut(hDCFrame, 5, 5, Buf, sprintf(Buf, "FPS: %.3f", GLB_FPS));
+    hDC = GetDC(hWnd);
+    BitBlt(hDC, 0, 0, w, h, hDCFrame, 0, 0, SRCCOPY);
+    ReleaseDC(hWnd, hDC);
     return 0;
 
   case WM_PAINT:
@@ -139,7 +151,13 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     return 0;
 
   case WM_ERASEBKGND:
-    return 1; 
+    return 1;
+
+  case WM_KEYDOWN:
+    if (wParam == 'P')
+      GLB_IsPause = !GLB_IsPause;
+    return 0;
+
   }
   return DefWindowProc(hWnd, Msg, wParam, lParam);
 } /* End of 'WinFunc' function */
