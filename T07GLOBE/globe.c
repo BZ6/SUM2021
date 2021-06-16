@@ -27,13 +27,9 @@ VOID GlobeSet( INT w, INT h)
   WINw = w;
   WINh = h;
 
-  for (i = 0, tetha = 0; i < GRID_H; i++, tetha += pi / (GRID_H - 1))
-    for (j = 0, phi = 0; j < GRID_W; j++, phi += 2 * pi / (GRID_W - 1))
-    {
-      Globe[i][j].X = sin(tetha) * sin(phi);
-      Globe[i][j].Y = cos(tetha);
-      Globe[i][j].Z = sin(tetha) * cos(phi);
-    }
+  for (i = 0, tetha = 0; i < GRID_H; i++, tetha += PI / (GRID_H - 1))
+    for (j = 0, phi = 0; j < GRID_W; j++, phi += 2 * PI / (GRID_W - 1))
+      Globe[i][j] = VecSet(sin(tetha) * sin(phi), cos(tetha), sin(tetha) * cos(phi));
 } /* End of 'GlobeSet' function */
 
 /* The draw globe function.
@@ -49,18 +45,21 @@ VOID GlobeSet( INT w, INT h)
  */
 VOID GlobeDraw( HDC hDC, DBL Size )
 {
-  INT i, j, r = WINw > WINh ? WINh : WINw;
+  INT i, j, r = WINw > WINh ? WINh : WINw;  
+  DBL s = 0.5 * sin(GLB_Time * 4), c = 0.5 * cos(GLB_Time * 4);
+  MATR MatrMove;
   static POINT pnts[GRID_H][GRID_W];
+
+  MatrMove = MatrMulMatr4(MatrScale(VecSet(0.5, 0.5, 0.5)), 
+                                         MatrRotateZ(45 * GLB_Time),  
+                                         MatrRotate(90 * GLB_Time, VecSet1(1)), 
+                                         MatrTranslate(VecSet(c, s, 0)));
 
   /* Project globe */
   for (i = 0; i < GRID_H; i++)
     for (j = 0; j < GRID_W; j++)
     {
-      VEC p = Globe[i][j];
-
-      p = RotateZ(45 * GLB_Time, p);
-      p = RotateY(90 * GLB_Time, p);
-      p = RotateX(135 * GLB_Time, p);
+      VEC p = PointTransform(Globe[i][j], MatrMove);
 
       pnts[i][j].x = (LONG)(WINw / 2 + p.X * r * 0.49);
       pnts[i][j].y = (LONG)(WINh / 2 - p.Y * r * 0.49);
@@ -100,7 +99,7 @@ VOID GlobeDraw( HDC hDC, DBL Size )
  */
 VEC RotateZ( DBL Angle, VEC V )
 {
-  DBL a = Angle * pi / 180, si = sin(a), co = cos(a);
+  DBL a = Angle * PI / 180, si = sin(a), co = cos(a);
   VEC pnts;
 
   pnts.X = V.X * co + V.Y * si;
@@ -121,7 +120,7 @@ VEC RotateZ( DBL Angle, VEC V )
  */
 VEC RotateX( DBL Angle, VEC V )
 {
-  DBL a = Angle * pi / 180, si = sin(a), co = cos(a);
+  DBL a = Angle * PI / 180, si = sin(a), co = cos(a);
   VEC pnts;
 
   pnts.Y = V.Y * co + V.Z * si;
@@ -142,7 +141,7 @@ VEC RotateX( DBL Angle, VEC V )
  */
 VEC RotateY( DBL Angle, VEC V )
 {
-  DBL a = Angle * pi / 180, si = sin(a), co = cos(a);
+  DBL a = Angle * PI / 180, si = sin(a), co = cos(a);
   VEC pnts;
 
   pnts.Z = V.Z * co + V.X * si;

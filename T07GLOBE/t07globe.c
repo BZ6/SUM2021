@@ -130,7 +130,8 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     SelectObject(hDCFrame, GetStockObject(WHITE_PEN));
     Rectangle(hDCFrame, 0, 0, w, h);
     SelectObject(hDCFrame, GetStockObject(DC_PEN));  
-    GlobeDraw( hDCFrame, 300);
+    GlobeDraw(hDCFrame, 300);
+    SetBkMode(hDCFrame, TRANSPARENT);
     TextOut(hDCFrame, 5, 5, Buf, sprintf(Buf, "FPS: %.3f", GLB_FPS));
     hDC = GetDC(hWnd);
     BitBlt(hDC, 0, 0, w, h, hDCFrame, 0, 0, SRCCOPY);

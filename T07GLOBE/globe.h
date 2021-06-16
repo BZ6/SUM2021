@@ -9,19 +9,11 @@
 
 #include <windows.h>
 #include "timer.h"
+#include "mth.h"
 
 /* Global definitions */
 #define GRID_H 30
 #define GRID_W 50
-#define pi 3.14159265358979323846
-
-/* Global struct */
-typedef DOUBLE DBL;
-
-typedef struct tagVEC
-{
-  DBL X, Y, Z;
-} VEC;
 
 /* Forward declaration */
 VOID GlobeSet( INT w, INT h );

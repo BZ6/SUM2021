@@ -16,6 +16,14 @@
 #define D2R(A) ((A) * (PI / 180.0))
 #define Degree2Radian(a) D2R(a)
 
+/* Matrixes multiplies */
+#define MatrMulMatr3(A, B, C) MatrMulMatr(MatrMulMatr(A, B), C)
+#define MatrMulMatr4(A, B, C, D) MatrMulMatr(MatrMulMatr(MatrMulMatr(A, B), C), D)
+#define MatrMulMatr5(A, B, C, D, E) MatrMulMatr(MatrMulMatr(MatrMulMatr(MatrMulMatr(A, B), C), D), E)
+
+/* Vector with 1 parametrs */
+#define VecSet1(A) VecSet(A, A, A)
+
 /* Base float type */
 typedef double DBL;
 typedef double FLT;
@@ -138,11 +146,11 @@ __inline VEC VecDivNum( VEC V, DBL N )
  *   - vectors to be add:
  *       VEC V1, V2;
  * RETURNS:
- *   (VEC) result vector.
+ *   (DBL) dot product.
  */
-__inline VEC VecDotVec( VEC V1, VEC V2 )
+__inline DBL VecDotVec( VEC V1, VEC V2 )
 {
-  return VecSet(V1.X * V2.X, V1.Y * V2.Y, V1.Z * V2.Z);
+  return V1.X * V2.X + V1.Y * V2.Y + V1.Z * V2.Z;
 } /* End of 'VecDotVec' function */
 
 /* Cross multiply two vectors function.
@@ -178,7 +186,7 @@ __inline VEC VecNeg( VEC V )
  */
 __inline DBL VecLen2( VEC V )
 {
-  return VecCrossVec(V, V);
+  return VecDotVec(V, V);
 } /* End of 'VecLen2' function */
 
 /* Length vector function.
@@ -199,7 +207,7 @@ __inline DBL VecLen( VEC V )
 
 /* Normalized vector function.
  * ARGUMENTS:
- *   - vector to be negative:
+ *   - vector to be normalized:
  *       VEC V;
  * RETURNS:
  *   (VEC) result vector.
@@ -229,10 +237,10 @@ __inline MATR MatrSet( DBL A00, DBL A01, DBL A02, DBL A03,
   MATR r =
   {
     {
-      {DBL A00, DBL A01, DBL A02, DBL A03},
-      {DBL A10, DBL A11, DBL A12, DBL A13},
-      {DBL A20, DBL A21, DBL A22, DBL A23},
-      {DBL A30, DBL A31, DBL A32, DBL A33}
+      {A00, A01, A02, A03},
+      {A10, A11, A12, A13},
+      {A20, A21, A22, A23},
+      {A30, A31, A32, A33}
     }
   };
 
@@ -334,6 +342,215 @@ __inline MATR MatrRotateZ( DBL AngleInDegree )
                  0, 0, 1, 0,
                  0, 0, 0, 1);
 } /* End of 'MatrRotateZ' function */
+
+/* Rotate by V function.
+ * ARGUMENTS:
+ *   - Angle in degrees:
+ *       DBL AngleInDegree;
+ *   - vector rotated by:
+ *       VEC V;
+ * RETURNS:
+ *   (MATR) result matrix.
+ */
+__inline MATR MatrRotate( DBL AngleInDegree, VEC V )
+{
+  DBL a = D2R(AngleInDegree), s = sin(a), c = cos(a);
+  VEC A = VecNormalize(V);
+
+  return MatrSet(c + A.X * A.X * (1 - c), A.X * A.Y * (1 - c) + A.Z * s, A.X * A.Z * (1 - c) - A.Y * s, 0,
+                 A.Y * A.X * (1 - c) - A.Z * s, c + A.Y * A.Y * (1 - c), A.Y * A.Z * (1 - c) + A.X * s, 0,
+                 A.X * A.Z * (1 - c) + A.Y * s, A.Y * A.Z * (1 - c) - A.X * s, c + A.Z * A.Z * (1 - c), 0,
+                 0, 0, 0, 1);
+} /* End of 'MatrRotate' function */
+
+/* Matrixes miltiply function.
+ * ARGUMENTS:
+ *   - matrixes to be mul:
+ *       MATR M1, M2;
+ * RETURNS:
+ *   (MATR) result matrix.
+ */
+__inline MATR MatrMulMatr( MATR M1, MATR M2 )
+{
+  return MatrSet(M1.A[0][0] * M2.A[0][0] + M1.A[0][1] * M2.A[1][0] + M1.A[0][2] * M2.A[2][0] + M1.A[0][3] * M2.A[3][0], 
+                 M1.A[0][0] * M2.A[0][1] + M1.A[0][1] * M2.A[1][1] + M1.A[0][2] * M2.A[2][1] + M1.A[0][3] * M2.A[3][1], 
+                 M1.A[0][0] * M2.A[0][2] + M1.A[0][1] * M2.A[1][2] + M1.A[0][2] * M2.A[2][2] + M1.A[0][3] * M2.A[3][2], 
+                 M1.A[0][0] * M2.A[0][3] + M1.A[0][1] * M2.A[1][3] + M1.A[0][2] * M2.A[2][3] + M1.A[0][3] * M2.A[3][3],
+
+                 M1.A[1][0] * M2.A[0][0] + M1.A[1][1] * M2.A[1][0] + M1.A[1][2] * M2.A[2][0] + M1.A[1][3] * M2.A[3][0], 
+                 M1.A[1][0] * M2.A[0][1] + M1.A[1][1] * M2.A[1][1] + M1.A[1][2] * M2.A[2][1] + M1.A[1][3] * M2.A[3][1], 
+                 M1.A[1][0] * M2.A[0][2] + M1.A[1][1] * M2.A[1][2] + M1.A[1][2] * M2.A[2][2] + M1.A[1][3] * M2.A[3][2], 
+                 M1.A[1][0] * M2.A[0][3] + M1.A[1][1] * M2.A[1][3] + M1.A[1][2] * M2.A[2][3] + M1.A[1][3] * M2.A[3][3],
+
+                 M1.A[2][0] * M2.A[0][0] + M1.A[2][1] * M2.A[1][0] + M1.A[2][2] * M2.A[2][0] + M1.A[2][3] * M2.A[3][0], 
+                 M1.A[2][0] * M2.A[0][1] + M1.A[2][1] * M2.A[1][1] + M1.A[2][2] * M2.A[2][1] + M1.A[2][3] * M2.A[3][1], 
+                 M1.A[2][0] * M2.A[0][2] + M1.A[2][1] * M2.A[1][2] + M1.A[2][2] * M2.A[2][2] + M1.A[2][3] * M2.A[3][2], 
+                 M1.A[2][0] * M2.A[0][3] + M1.A[2][1] * M2.A[1][3] + M1.A[2][2] * M2.A[2][3] + M1.A[2][3] * M2.A[3][3],
+
+                 M1.A[3][0] * M2.A[0][0] + M1.A[3][1] * M2.A[1][0] + M1.A[3][2] * M2.A[2][0] + M1.A[3][3] * M2.A[3][0], 
+                 M1.A[3][0] * M2.A[0][1] + M1.A[3][1] * M2.A[1][1] + M1.A[3][2] * M2.A[2][1] + M1.A[3][3] * M2.A[3][1], 
+                 M1.A[3][0] * M2.A[0][2] + M1.A[3][1] * M2.A[1][2] + M1.A[3][2] * M2.A[2][2] + M1.A[3][3] * M2.A[3][2], 
+                 M1.A[3][0] * M2.A[0][3] + M1.A[3][1] * M2.A[1][3] + M1.A[3][2] * M2.A[2][3] + M1.A[3][3] * M2.A[3][3]);
+} /* End of 'MatrMulMatr' function */
+
+/* Matrix miltiply vector function.
+ * ARGUMENTS:
+ *   - vector to be mul:
+ *       VEC V; 
+ *   - matrixe to be mul:
+ *       MATR M;
+ * RETURNS:
+ *   (VEC) result vector.
+ */
+__inline VEC VecMulMatr( VEC V, MATR M ) 
+{
+  DBL w = V.X * M.A[0][3] + V.Y * M.A[1][3] + V.Z * M.A[2][3] + M.A[3][3];
+
+  return VecSet((V.X * M.A[0][0] + V.Y * M.A[1][0] + V.Z * M.A[2][0] + M.A[3][0]) / w, 
+                (V.X * M.A[0][1] + V.Y * M.A[1][1] + V.Z * M.A[2][1] + M.A[3][1]) / w,
+                (V.X * M.A[0][2] + V.Y * M.A[1][2] + V.Z * M.A[2][2] + M.A[3][2]) / w);
+} /* End of 'VecMulMatr' function */
+
+/* Transformed point vector function.
+ * ARGUMENTS:
+ *   - point vector to be transformed:
+ *       VEC V; 
+ *   - matrixe transform:
+ *       MATR M;
+ * RETURNS:
+ *   (VEC) result vector.
+ */
+__inline VEC PointTransform( VEC V, MATR M ) 
+{
+  return VecSet(V.X * M.A[0][0] + V.Y * M.A[1][0] + V.Z * M.A[2][0] + M.A[3][0], 
+                V.X * M.A[0][1] + V.Y * M.A[1][1] + V.Z * M.A[2][1] + M.A[3][1],
+                V.X * M.A[0][2] + V.Y * M.A[1][2] + V.Z * M.A[2][2] + M.A[3][2]);
+} /* End of 'PointTransform' function */
+
+/* Transformed vector function.
+ * ARGUMENTS:
+ *   - vector to be transformed:
+ *       VEC V; 
+ *   - matrix transform:
+ *       MATR M;
+ * RETURNS:
+ *   (VEC) result vector.
+ */
+__inline VEC VectorTransform( VEC V, MATR M ) 
+{
+  return VecSet(V.X * M.A[0][0] + V.Y * M.A[1][0] + V.Z * M.A[2][0], 
+                V.X * M.A[0][1] + V.Y * M.A[1][1] + V.Z * M.A[2][1],
+                V.X * M.A[0][2] + V.Y * M.A[1][2] + V.Z * M.A[2][2]);
+} /* End of 'VectorTransform' function */
+
+/* Determinant of matrix 3x3 function.
+ * ARGUMENTS:
+ *   - numbers in matrix 3x3:
+ *       DBL A11, A12, A13,
+ *           A21, A22, A23,
+ *           A31, A32, A33;
+ * RETURNS:
+ *   (DBL) determinant of matrix 3x3.
+ */
+__inline DBL MatrDeterm3x3( DBL A11, DBL A12, DBL A13,
+                   DBL A21, DBL A22, DBL A23,
+                   DBL A31, DBL A32, DBL A33 )
+{
+  return A11 * A22 * A33 + A12 * A23 * A31 + A13 * A21 * A32 -
+         A11 * A23 * A32 - A12 * A21 * A33 - A13 * A22 * A31;
+} /* End of 'MatrDeterm3x3' function */
+
+/* Determinant of matrix function.
+ * ARGUMENTS:
+ *   - matrix to be calculated determinent:
+ *       MATR M;
+ * RETURNS:
+ *   (DBL) determinant of matrix.
+ */
+__inline DBL MatrDeterm( MATR M )
+{
+  return
+    +M.A[0][0] * MatrDeterm3x3(M.A[1][1], M.A[1][2], M.A[1][3],
+                               M.A[2][1], M.A[2][2], M.A[2][3],
+                               M.A[3][1], M.A[3][2], M.A[3][3]) +
+    -M.A[0][1] * MatrDeterm3x3(M.A[1][0], M.A[1][2], M.A[1][3],
+                               M.A[2][0], M.A[2][2], M.A[2][3],
+                               M.A[3][0], M.A[3][2], M.A[3][3]) +
+    +M.A[0][2] * MatrDeterm3x3(M.A[1][0], M.A[1][1], M.A[1][3],
+                               M.A[2][0], M.A[2][1], M.A[2][3],
+                               M.A[3][0], M.A[3][1], M.A[3][3]) +
+    -M.A[0][3] * MatrDeterm3x3(M.A[1][0], M.A[1][1], M.A[1][2],
+                               M.A[2][0], M.A[2][1], M.A[2][2],
+                               M.A[3][0], M.A[3][1], M.A[3][2]);
+} /* End of 'MatrDeterm' function */
+
+/* Inverse matrix of matrix function.
+ * ARGUMENTS:
+ *   - matrix to be inverse:
+ *       MATR M;
+ * RETURNS:
+ *   (MATR) inverse matrix of matrix.
+ */
+__inline MATR MatrInverse( MATR M )
+{
+  DBL det = MatrDeterm(M);
+
+  if (det == 0)
+    return MatrIdentity();
+
+  /* build adjoint matrix */
+  return MatrSet(MatrDeterm3x3(M.A[1][1], M.A[1][2], M.A[1][3],
+                               M.A[2][1], M.A[2][2], M.A[2][3],
+                               M.A[3][1], M.A[3][2], M.A[3][3]) / det, 
+                 -MatrDeterm3x3(M.A[0][1], M.A[0][2], M.A[0][3],
+                                M.A[2][1], M.A[2][2], M.A[2][3],
+                                M.A[3][1], M.A[3][2], M.A[3][3]) / det, 
+                 MatrDeterm3x3(M.A[0][1], M.A[0][2], M.A[0][3],
+                               M.A[1][1], M.A[1][2], M.A[1][3],
+                               M.A[3][1], M.A[3][2], M.A[3][3]) / det, 
+                 -MatrDeterm3x3(M.A[0][1], M.A[0][2], M.A[0][3],
+                                M.A[1][1], M.A[1][2], M.A[1][3],
+                                M.A[2][1], M.A[2][2], M.A[2][3]) / det,
+
+                 -MatrDeterm3x3(M.A[1][0], M.A[1][2], M.A[1][3],
+                                M.A[2][0], M.A[2][2], M.A[2][3],
+                                M.A[3][0], M.A[3][2], M.A[3][3]) / det, 
+                 MatrDeterm3x3(M.A[0][0], M.A[0][2], M.A[0][3],
+                               M.A[2][0], M.A[2][2], M.A[2][3],
+                               M.A[3][0], M.A[3][2], M.A[3][3]) / det, 
+                 -MatrDeterm3x3(M.A[0][0], M.A[0][2], M.A[0][3],
+                                M.A[1][0], M.A[1][2], M.A[1][3],
+                                M.A[3][0], M.A[3][2], M.A[3][3]) / det, 
+                 MatrDeterm3x3(M.A[0][0], M.A[0][2], M.A[0][3],
+                               M.A[1][0], M.A[1][2], M.A[1][3],
+                               M.A[2][0], M.A[2][2], M.A[2][3]) / det,
+
+                 MatrDeterm3x3(M.A[1][0], M.A[1][1], M.A[1][3],
+                               M.A[2][0], M.A[2][1], M.A[2][3],
+                               M.A[3][0], M.A[3][1], M.A[3][3]) / det, 
+                 -MatrDeterm3x3(M.A[0][0], M.A[0][1], M.A[0][3],
+                                M.A[2][0], M.A[2][1], M.A[2][3],
+                                M.A[3][0], M.A[3][1], M.A[3][3]) / det, 
+                 MatrDeterm3x3(M.A[0][0], M.A[0][1], M.A[0][3],
+                               M.A[1][0], M.A[1][1], M.A[1][3],
+                               M.A[3][0], M.A[3][1], M.A[3][3]) / det, 
+                 -MatrDeterm3x3(M.A[0][0], M.A[0][1], M.A[0][3],
+                                M.A[1][0], M.A[1][1], M.A[1][3],
+                                M.A[2][0], M.A[2][1], M.A[2][3]) / det,
+
+                 -MatrDeterm3x3(M.A[1][0], M.A[1][1], M.A[1][2],
+                                M.A[2][0], M.A[2][1], M.A[2][2],
+                                M.A[3][0], M.A[3][1], M.A[3][2]) / det, 
+                 MatrDeterm3x3(M.A[0][0], M.A[0][1], M.A[0][2],
+                               M.A[2][0], M.A[2][1], M.A[2][2],
+                               M.A[3][0], M.A[3][1], M.A[3][2]) / det, 
+                 -MatrDeterm3x3(M.A[0][0], M.A[0][1], M.A[0][2],
+                                M.A[1][0], M.A[1][1], M.A[1][2],
+                                M.A[3][0], M.A[3][1], M.A[3][2]) / det, 
+                 MatrDeterm3x3(M.A[0][0], M.A[0][1], M.A[0][2],
+                               M.A[1][0], M.A[1][1], M.A[1][2],
+                               M.A[2][0], M.A[2][1], M.A[2][2]) / det);
+} /* End of 'MatrInverse' function */
 
 #endif /* __mth_h_ */
 
