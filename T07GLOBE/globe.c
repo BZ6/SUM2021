@@ -29,7 +29,7 @@ VOID GlobeSet( INT w, INT h)
 
   for (i = 0, tetha = 0; i < GRID_H; i++, tetha += PI / (GRID_H - 1))
     for (j = 0, phi = 0; j < GRID_W; j++, phi += 2 * PI / (GRID_W - 1))
-      Globe[i][j] = VecSet(sin(tetha) * sin(phi), cos(tetha), sin(tetha) * cos(phi));
+      Globe[i][j] = VecSet(4 * sin(tetha) * sin(phi), 8 * cos(tetha), 12 * sin(tetha) * cos(phi));
 } /* End of 'GlobeSet' function */
 
 /* The draw globe function.
@@ -46,23 +46,36 @@ VOID GlobeSet( INT w, INT h)
 VOID GlobeDraw( HDC hDC, DBL Size )
 {
   INT i, j, r = WINw > WINh ? WINh : WINw;  
-  DBL s = 0.5 * sin(GLB_Time * 4), c = 0.5 * cos(GLB_Time * 4);
-  MATR MatrMove;
+  DBL Wp, Hp, ProjDist, size = 2, s = 0.5 * sin(GLB_Time * 4), c = 0.5 * cos(GLB_Time * 4);
+  MATR WorldMatr;
   static POINT pnts[GRID_H][GRID_W];
 
-  MatrMove = MatrMulMatr4(MatrScale(VecSet(0.5, 0.5, 0.5)), 
-                                         MatrRotateZ(45 * GLB_Time),  
-                                         MatrRotate(90 * GLB_Time, VecSet1(1)), 
-                                         MatrTranslate(VecSet(c, s, 0)));
+  WorldMatr = MatrMulMatr4(MatrScale(VecSet(0.1, 0.1, 0.1)), 
+                           MatrRotateZ(45 * GLB_Time),  
+                           MatrRotate(90 * GLB_Time, VecSet1(1)), 
+                           MatrTranslate(VecSet(0 * c, 0, 0 * s)));
+  WorldMatr = MatrMulMatr(WorldMatr, 
+                          MatrView(VecSet(3, 0, 0), 
+                                   VecSet(0, 0, 0), 
+                                   VecSet(0, 1, 0)));
+  ProjDist = size;
+  Wp = Hp = size;
+  if (WINw > WINh)
+    Wp *= (DBL)WINw / WINh;
+  else
+    Hp *= (DBL)WINh / WINw;
 
   /* Project globe */
   for (i = 0; i < GRID_H; i++)
     for (j = 0; j < GRID_W; j++)
     {
-      VEC p = PointTransform(Globe[i][j], MatrMove);
+      VEC p = PointTransform(Globe[i][j], WorldMatr);
 
-      pnts[i][j].x = (LONG)(WINw / 2 + p.X * r * 0.49);
-      pnts[i][j].y = (LONG)(WINh / 2 - p.Y * r * 0.49);
+      p.X *= -ProjDist / p.Z;
+      p.Y *= -ProjDist / p.Z;
+
+      pnts[i][j].x = (LONG)(WINw / 2 + p.X * WINw / Wp);
+      pnts[i][j].y = (LONG)(WINh / 2 - p.Y * WINh / Hp);
     } 
 
   /* Draw globe */
