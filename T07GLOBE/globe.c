@@ -28,7 +28,7 @@ VOID GlobeSet( INT w, INT h)
   WINh = h;
 
   for (i = 0, tetha = 0; i < GRID_H; i++, tetha += PI / (GRID_H - 1))
-    for (j = 0, phi = 0; j < GRID_W; j++, phi += 2 * PI / (GRID_W - 1))
+    for (j = 0, phi = 0; j < GRID_W; j++, phi += 2 * PI / (GRID_W))
       Globe[i][j] = VecSet(4 * sin(tetha) * sin(phi), 8 * cos(tetha), 12 * sin(tetha) * cos(phi));
 } /* End of 'GlobeSet' function */
 
@@ -46,7 +46,7 @@ VOID GlobeSet( INT w, INT h)
 VOID GlobeDraw( HDC hDC, DBL Size )
 {
   INT i, j, r = WINw > WINh ? WINh : WINw;  
-  DBL Wp, Hp, ProjDist, size = 2, s = 0.5 * sin(GLB_Time * 4), c = 0.5 * cos(GLB_Time * 4);
+  DBL Wp, Hp, ProjDist, size = 2, s = 0.5 * sin(GLB_Time * 2), c = 0.5 * cos(GLB_Time * 2);
   MATR WorldMatr;
   static POINT pnts[GRID_H][GRID_W];
 
@@ -55,9 +55,10 @@ VOID GlobeDraw( HDC hDC, DBL Size )
                            MatrRotate(90 * GLB_Time, VecSet1(1)), 
                            MatrTranslate(VecSet(0 * c, 0, 0 * s)));
   WorldMatr = MatrMulMatr(WorldMatr, 
-                          MatrView(VecSet(3, 0, 0), 
+                          MatrView(VecSet(0, 0, 5), 
                                    VecSet(0, 0, 0), 
                                    VecSet(0, 1, 0)));
+
   ProjDist = size;
   Wp = Hp = size;
   if (WINw > WINh)
@@ -65,17 +66,18 @@ VOID GlobeDraw( HDC hDC, DBL Size )
   else
     Hp *= (DBL)WINh / WINw;
 
+  ProjDist = size; 
+  WorldMatr = MatrMulMatr(WorldMatr, 
+                          MatrFrustum(-Wp / 2, Wp / 2, -Hp / 2, Hp / 2, ProjDist, 400));
+
   /* Project globe */
   for (i = 0; i < GRID_H; i++)
     for (j = 0; j < GRID_W; j++)
     {
-      VEC p = PointTransform(Globe[i][j], WorldMatr);
+      VEC p = VecMulMatr(Globe[i][j], WorldMatr);
 
-      p.X *= -ProjDist / p.Z;
-      p.Y *= -ProjDist / p.Z;
-
-      pnts[i][j].x = (LONG)(WINw / 2 + p.X * WINw / Wp);
-      pnts[i][j].y = (LONG)(WINh / 2 - p.Y * WINh / Hp);
+      pnts[i][j].x = (LONG)((p.X + 1)* WINw / 2);
+      pnts[i][j].y = (LONG)((p.Y + 1)* WINh / 2);
     } 
 
   /* Draw globe */
@@ -93,7 +95,7 @@ VOID GlobeDraw( HDC hDC, DBL Size )
       if ((p[0].x - p[1].x) * (p[0].y + p[1].y) +
           (p[1].x - p[2].x) * (p[1].y + p[2].y) +
           (p[2].x - p[3].x) * (p[2].y + p[3].y) +
-          (p[3].x - p[0].x) * (p[3].y + p[0].y) <= 0)
+          (p[3].x - p[0].x) * (p[3].y + p[0].y) >= 0)
         continue;
 
       Polygon(hDC, p, 4);

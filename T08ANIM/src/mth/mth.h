@@ -8,6 +8,7 @@
 #define __mth_h_
 
 #include <math.h>
+#include <windows.h>
 
 /* Pi math constant */
 #define PI 3.14159265358979323846
@@ -25,8 +26,8 @@
 #define VecSet1(A) VecSet(A, A, A)
 
 /* Base float type */
-typedef double DBL;
-typedef double FLT;
+typedef DOUBLE DBL;
+typedef FLOAT FLT;
 
 /* Vector type */
 typedef struct tagVEC

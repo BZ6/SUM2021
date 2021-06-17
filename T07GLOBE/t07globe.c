@@ -5,7 +5,6 @@
  */
 
 #include <stdio.h>
-#include <math.h>
 #include "globe.h"
 
 /* Window class name */
