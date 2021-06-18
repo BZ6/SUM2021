@@ -46,21 +46,176 @@ typedef struct tagbz6PRIM
 } bz6PRIM;
 
 /* Forward declaration */
+
+/* Rendering initialization function.
+ * ARGUMENTS:
+ *   - window handle:
+ *      HWND hWnd;
+ * RETURNS:
+ *   NONE.
+ */
 VOID BZ6_RndInit( HWND hWnd );
+
+/* Rendering close function.
+ * ARGUMENTS:
+ *   NONE;
+ * RETURNS:
+ *   NONE.
+ */
 VOID BZ6_RndClose( VOID );
+
+/* Rendering projection set function.
+ * ARGUMENTS:
+ *   NONE;
+ * RETURNS:
+ *   NONE.
+ */
 VOID BZ6_RndProjSet( VOID );
+
+/* Rendering iresize function.
+ * ARGUMENTS:
+ *   - window size:
+ *      INT W, H;
+ * RETURNS:
+ *   NONE.
+ */
 VOID BZ6_RndResize( INT W, INT H );
+
+/* Rendering copy frame function.
+ * ARGUMENTS:
+ *   - window handle discreaptor:
+ *      HDC hDC;
+ * RETURNS:
+ *   NONE.
+ */
 VOID BZ6_RndCopyFrame( HDC hDC );
+
+/* Rendering look-at viewer setup function.
+ * ARGUMENTS:
+ *   - viewer position, look-at point, approximate up direction:
+ *       VEC Loc, At, Up1;
+ * RETURNS:
+ *   NONE.
+ */
 VOID BZ6_RndCamSet( VEC Loc, VEC At, VEC Up );
+
+/* Rendering start function.
+ * ARGUMENTS:
+ *   NONE;
+ * RETURNS:
+ *   NONE.
+ */
 VOID BZ6_RndStart( VOID );
+
+/* Rendering end function.
+ * ARGUMENTS:
+ *   NONE;
+ * RETURNS:
+ *   NONE.
+ */
 VOID BZ6_RndEnd( VOID );
 
 /* Forward declaration primitive functiones */
+
+/* Rendering create primitive function.
+ * ARGUMENTS:
+ *   - primitive:
+ *       bz6PRIM *Pr;
+ *   - numbers of vertexes and indexes:
+ *       INT NoofV, NoofI
+ * RETURNS:
+ *   (BOOL) TRUE if complete, FALSE if not complete.
+ */
 BOOL BZ6_RndPrimCreate( bz6PRIM *Pr, INT NoofV, INT NoofI );
+
+/* Rendering free primitive function.
+ * ARGUMENTS:
+ *   - primitive:
+ *       bz6PRIM *Pr;
+ * RETURNS:
+ *   NONE.
+ */
 VOID BZ6_RndPrimFree( bz6PRIM *Pr );
+
+/* Rendering draw primitive function.
+ * ARGUMENTS:
+ *   - primitive:
+ *       bz6PRIM *Pr;
+ *   - matrix of transformation primitive:
+ *       MATR World;
+ * RETURNS:
+ *   NONE.
+ */
 VOID BZ6_RndPrimDraw( bz6PRIM *Pr, MATR World );
 
+/* Rendering draw sphere function.
+ * ARGUMENTS:
+ *   - primitive:
+ *       bz6PRIM *Pr;
+ *   - location:
+ *       VEC C;
+ *   - radius:
+ *       DBL R;
+ *   - size:
+ *       INT SplitW, SplitH;
+ * RETURNS:
+ *   NONE.
+ */
 VOID BZ6_RndPrimCreateSphere( bz6PRIM *Pr, VEC C, DBL R, INT SplitW, INT SplitH );
+
+/* Create grid function.
+ * ARGUMENTS:
+ *   - primitive:
+ *       bz6PRIM *Pr;
+ *   - size:
+ *       INT GridW, GridH;
+ * RETURNS:
+ *   NONE.
+ */
+VOID BZ6_RndPrimCreateGrid( bz6PRIM *Pr, INT GridW, INT GridH );
+
+/* Rendering draw torus function.
+ * ARGUMENTS:
+ *   - primitive:
+ *       bz6PRIM *Pr;
+ *   - location:
+ *       VEC C;
+ *   - radiuses small and big:
+ *       DBL r, R;
+ *   - size:
+ *       INT SplitW, SplitH;
+ * RETURNS:
+ *   NONE.
+ */
+VOID BZ6_RndPrimCreateTorus( bz6PRIM *Pr, VEC C, DBL r, DBL R, INT SplitW, INT SplitH );
+
+/* Load primitive from '*.OBJ' file function.
+ * ARGUMENTS:
+ *   - pointer to primitive to load:
+ *       bz6PRIM *Pr;
+ *   - '*.OBJ' file name:
+ *       CHAR *FileName;
+ * RETURNS:
+ *   (BOOL) TRUE if success, FALSE otherwise.
+ */
+BOOL BZ6_RndPrimLoad( bz6PRIM *Pr, CHAR *FileName );
+
+/* Rendering draw base function.
+ * ARGUMENTS:
+ *   - primitive:
+ *       bz6PRIM *Pr;
+ *   - location:
+ *       VEC Position;
+ *   - plane direction:
+ *       VEC DirectionWeird, DirectionHeight;
+ *   - size of base:
+ *       DBL BaseWeird, BaseHeight;
+ *   - size:
+ *       INT SplitW, SplitH;
+ * RETURNS:
+ *   NONE.
+ */
+VOID BZ6_RndPrimCreateBase( bz6PRIM *Pr, VEC Position, VEC DirectionWeird, VEC DirectionHeight, DBL BaseWeird, DBL BaseHeight, INT SplitW, INT SplitH );
 
 #endif /* __rnd_h_ */
 

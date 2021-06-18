@@ -4,6 +4,7 @@
  * PURPOSE: 3D main module.
  */
 
+#include <time.h>
 #include "../anim/rnd/rnd.h"
 
 /* Window class name */
@@ -98,15 +99,17 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
 {
   HDC hDC;
   PAINTSTRUCT ps;
-  static bz6PRIM Pr;
+  DBL t = clock() / 1000.0;
+  static bz6PRIM PrF, PrH, PrBase;
 
   switch (Msg)
   {
   case WM_CREATE:
-    BZ6_RndPrimCreateSphere(&Pr, VecSet(0, 0, 0), 1, 6, 8);
-
     BZ6_RndInit(hWnd);
-    SetTimer(hWnd, 30, 10, NULL);
+    BZ6_RndPrimLoad(&PrF, "girl.obj");
+    BZ6_RndPrimLoad(&PrH, "Harley.obj");
+    BZ6_RndPrimCreateBase(&PrBase, VecSet1(0), VecSet(1, 0, 0), VecSet(0, 0, 1), 5, 8, 10, 15);
+    SetTimer(hWnd, 30, 1, NULL);
     return 0;
 
   case WM_SIZE:
@@ -118,7 +121,10 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
 
   case WM_TIMER:
     BZ6_RndStart();
-    BZ6_RndPrimDraw(&Pr, MatrIdentity());
+    BZ6_RndCamSet(VecSet(100 * sin(t), 120, 100 * cos(t)), VecSet(0, 55, 0), VecSet(0, 1, 0));
+    BZ6_RndPrimDraw(&PrF, MatrMulMatr3(MatrTranslate(VecSet(0, 0, -60)), MatrRotateY(0), MatrScale(VecSet1(0.5))));
+    BZ6_RndPrimDraw(&PrH, MatrMulMatr4(MatrRotateX(-90), MatrRotateY(180), MatrTranslate(VecSet(0, 0, 60)), MatrScale(VecSet1(0.5))));
+    BZ6_RndPrimDraw(&PrBase, MatrIdentity());
     BZ6_RndEnd();
     InvalidateRect(hWnd, NULL, TRUE);
     return 0;
@@ -133,7 +139,9 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
     return 1;
 
   case WM_DESTROY:
-    BZ6_RndPrimFree(&Pr);
+    BZ6_RndPrimFree(&PrF);
+    BZ6_RndPrimFree(&PrH);
+    BZ6_RndPrimFree(&PrBase);
     BZ6_RndClose();
     KillTimer(hWnd, 30);
     PostMessage(hWnd, WM_QUIT, 0, 0);
