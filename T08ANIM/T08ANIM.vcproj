@@ -202,6 +202,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\anim\input.c"
+					>
+				</File>
+				<File
+					RelativePath=".\src\anim\timer.c"
+					>
+				</File>
+				<File
 					RelativePath=".\src\anim\unit.c"
 					>
 				</File>
@@ -243,6 +251,10 @@
 				</File>
 				<File
 					RelativePath=".\src\units\u_bounceball.c"
+					>
+				</File>
+				<File
+					RelativePath=".\src\units\u_ctrl.c"
 					>
 				</File>
 				<File

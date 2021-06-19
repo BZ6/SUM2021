@@ -141,7 +141,7 @@ VOID BZ6_RndPrimCreateBase( bz6PRIM *Pr, VEC Position, VEC DirectionWeird, VEC D
     for (j = 0; j < SplitW; j++)
       Pr->V[j + SplitW * i].P = VecAddVec(Position, VecAddVec(VecMulNum(DirectionW, j),
                                           VecMulNum(DirectionH, i)));
-  Pr->Trans = MatrTranslate(VecAddVec(VecMulNum(DirectionW, (DBL)-SplitW / 2), VecMulNum(DirectionH, (DBL)-SplitH / 2)));
+  Pr->Trans = MatrTranslate(VecAddVec(VecMulNum(DirectionW, (DBL)(-SplitW) / 2), VecMulNum(DirectionH, (DBL)(-SplitH) / 2)));
 
   BZ6_RndPrimCreateGrid(Pr, SplitW, SplitH);
 } /* End of 'BZ6_RndPrimCreatebase' function */

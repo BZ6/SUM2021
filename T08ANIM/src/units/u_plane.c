@@ -1,10 +1,9 @@
 /* FILE NAME: u_plane.c
  * PROGRAMMER: BZ6
  * DATE: 19.06.2021
- * PURPOSE: 3D animationplane function module.
+ * PURPOSE: 3D animation plane unit module.
  */
 
-#include <time.h>
 #include "units.h"
 
 typedef struct

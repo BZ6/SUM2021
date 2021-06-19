@@ -20,6 +20,8 @@ VOID BZ6_AnimInit( HWND hWnd )
   BZ6_Anim.hWnd = hWnd;
   BZ6_RndInit(hWnd);
   BZ6_Anim.hDC = BZ6_hRndDCFrame;
+  BZ6_TimerInit();
+  BZ6_AnimInputInit();
 } /* End of 'BZ6_AnimInit' function */
 
 /* Animation close function.
@@ -77,6 +79,9 @@ VOID BZ6_AnimCopyFrame( HDC hDC )
 VOID BZ6_AnimRender( VOID )
 {
   INT i;
+
+  BZ6_TimerResponse();
+  BZ6_AnimInputResponse();
 
   for (i = 0; i < BZ6_Anim.NumOfUnits; i++)
     BZ6_Anim.Units[i]->Response(BZ6_Anim.Units[i], &BZ6_Anim);

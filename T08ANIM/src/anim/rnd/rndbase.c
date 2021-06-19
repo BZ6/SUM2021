@@ -25,7 +25,7 @@ VOID BZ6_RndInit( HWND hWnd )
   BZ6_RndMatrView = MatrIdentity();
   BZ6_RndMatrProj = MatrIdentity();
   BZ6_RndMatrVP = MatrIdentity();
-  BZ6_RndCamSet(VecSet(0, 3, 5), VecSet1(0), VecSet(0, 1, 0));
+  BZ6_RndCamSet(VecSet(2, 3, 5), VecSet1(0), VecSet(0, 1, 0));
 } /* End of 'BZ6_RndInit' function */
 
 /* Rendering close function.

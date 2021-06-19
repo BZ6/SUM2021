@@ -34,11 +34,31 @@ struct tagbz6ANIM
 
   bz6UNIT *Units[BZ6_MAX_UNITS]; /* Array of units */
   INT NumOfUnits;                /* Count of units */
+
+  /* Timer data */
+  DBL
+    GlobalTime, GlobalDeltaTime, /* Global time and interframe interval */
+    Time, DeltaTime,             /* Time with pause and interframe interval */
+    FPS;                         /* Frames per second value */
+  BOOL
+    IsPause;                     /* Pause flag */
+
+  /* Input data */
+  BYTE
+    JBut[32], JButOld[32], JButClick[32]; /* Joystick button states */
+  INT JPov;                               /* Joystick point-of-view control [-1,0..7] */
+  DBL
+    JX, JY, JZ, JR;                       /* Joystick axes */
+  BYTE 
+    Keys[256],      /* Keyboard in frame */
+    KeysClick[256], /* Keyboard 1 click in frame */
+    KeysOld[256];   /* Keyboard in priveous frame */
+  INT Mx, My, Mz, Mdx, Mdy, Mdz; /* Mouse data */
 };
 
-
-
 extern bz6ANIM BZ6_Anim;
+
+extern INT BZ6_MouseWheel;
 
 /* Animation initialization function.
  * ARGUMENTS:
@@ -112,6 +132,38 @@ VOID BZ6_AnimFlipFullScreen( VOID );
  * RETURNS: None.
  */
 VOID BZ6_AnimExit( VOID );
+
+/***
+ * Timer declaration
+ ***/
+
+/* Timer initialization function.
+ * ARGUMENTS: NONE;
+ * RETURNS: NONE.
+ */
+VOID BZ6_TimerInit( VOID );
+
+/* Timer interframe response function.
+ * ARGUMENTS: NONE;
+ * RETURNS: NONE.
+ */
+VOID BZ6_TimerResponse( VOID );
+
+/***
+ * Input declaration
+ ***/
+
+/* Animation input initialization function.
+ * ARGUMENTS: NONE;
+ * RETURNS: NONE.
+ */
+VOID BZ6_AnimInputInit( VOID );
+
+/* Animation input response function.
+ * ARGUMENTS: NONE;
+ * RETURNS: NONE.
+ */
+VOID BZ6_AnimInputResponse( VOID );
 
 #endif /* __anim_h_ */
 

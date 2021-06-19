@@ -4,7 +4,6 @@
  * PURPOSE: 3D main module.
  */
 
-#include <time.h>
 #include "../units/units.h"
 
 /* Window class name */
@@ -71,6 +70,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   BZ6_AnimAddUnit( BZ6_UnitCreatePlane());
   BZ6_AnimAddUnit( BZ6_UnitCreateBall());
   BZ6_AnimAddUnit( BZ6_UnitCreateBounceBall());
+  BZ6_AnimAddUnit( BZ6_UnitCreateCtrl());
 
   /* Message loop */
   while (TRUE)
@@ -103,7 +103,6 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
 {
   HDC hDC;
   PAINTSTRUCT ps;
-  DBL t = clock() / 1000.0;
   static bz6PRIM PrF, PrH, PrBase;
 
   switch (Msg)
@@ -142,8 +141,22 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
   case WM_KEYDOWN:
     if (wParam == 'F')
       BZ6_AnimFlipFullScreen();
+    else if (wParam == 'P')
+      BZ6_Anim.IsPause = !BZ6_Anim.IsPause;
     else if (wParam == 27)
       BZ6_AnimExit();
+    return 0;
+
+  case WM_MOUSEWHEEL:
+    BZ6_MouseWheel += (SHORT)HIWORD(wParam);
+    return 0;
+
+  case WM_LBUTTONDOWN:
+    SetCapture(hWnd);
+    return 0;
+
+  case WM_LBUTTONUP:
+    ReleaseCapture();
     return 0;
 
   case WM_DESTROY:

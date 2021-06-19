@@ -1,10 +1,9 @@
 /* FILE NAME: u_ball.c
  * PROGRAMMER: BZ6
  * DATE: 19.06.2021
- * PURPOSE: 3D animation ball function module.
+ * PURPOSE: 3D animation ball unit module.
  */
 
-#include <time.h>
 #include "units.h"
 
 typedef struct
@@ -12,7 +11,6 @@ typedef struct
   BZ6_UNIT_BASE_FIELDS;
   VEC Pos;
   bz6PRIM Pr;
-  DBL t;
 } bz6UNIT_BALL;
 
 /* Unit ball initialization function.
@@ -25,7 +23,6 @@ typedef struct
  */
 static VOID BZ6_UnitInit( bz6UNIT_BALL *Uni, bz6ANIM *Ani )
 {
-  Uni->t = 0;
   BZ6_RndPrimCreateSphere(&Uni->Pr, Uni->Pos, 0.5, 30, 20);
   Uni->Pos = VecSet1(0);
 } /* End of 'BZ6_UnitInit' function */
@@ -40,7 +37,6 @@ static VOID BZ6_UnitInit( bz6UNIT_BALL *Uni, bz6ANIM *Ani )
  */
 static VOID BZ6_UnitResponse( bz6UNIT_BALL *Uni, bz6ANIM *Ani )
 {
-  Uni->t = clock() / 20.0;
 } /* End of 'BZ6_UnitResponse' function */
 
 /* Unit ball render function.
@@ -53,7 +49,7 @@ static VOID BZ6_UnitResponse( bz6UNIT_BALL *Uni, bz6ANIM *Ani )
  */
 static VOID BZ6_UnitRender( bz6UNIT_BALL *Uni, bz6ANIM *Ani )
 {
-  BZ6_RndPrimDraw(&Uni->Pr, MatrMulMatr(MatrRotate(Uni->t, VecSet1(1)), MatrTranslate(VecSet(1, 0, 0))));
+  BZ6_RndPrimDraw(&Uni->Pr, MatrMulMatr(MatrRotate(BZ6_Anim.Time * 50, VecSet1(1)), MatrTranslate(VecSet(1, 0, 0))));
 } /* End of 'BZ6_UnitRender' function */
 
 /* Unit ball deinitialization function.
