@@ -8,6 +8,7 @@
 #define __mth_h_
 
 #include <math.h>
+
 #include <windows.h>
 
 /* Pi math constant */

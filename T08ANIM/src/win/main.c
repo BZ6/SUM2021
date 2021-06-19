@@ -5,7 +5,7 @@
  */
 
 #include <time.h>
-#include "../anim/rnd/rnd.h"
+#include "../units/units.h"
 
 /* Window class name */
 #define BZ6_WND_CLASS_NAME "My Window Class Name"
@@ -68,6 +68,8 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   ShowWindow(hWnd, CmdShow);
   UpdateWindow(hWnd);
 
+  BZ6_AnimAddUnit( BZ6_UnitCreateBall());
+
   /* Message loop */
   while (TRUE)
     if (PeekMessage(&Msg, NULL, 0, 0, PM_REMOVE))
@@ -104,50 +106,48 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
 
   switch (Msg)
   {
+  case WM_GETMINMAXINFO:
+    ((MINMAXINFO *)lParam)->ptMaxTrackSize.y =
+      GetSystemMetrics(SM_CYMAXTRACK) + GetSystemMetrics(SM_CYCAPTION) + 2 * GetSystemMetrics(SM_CYBORDER);
+    return 0;
+
   case WM_CREATE:
-    BZ6_RndInit(hWnd);
-    BZ6_RndPrimLoad(&PrF, "girl.obj");
-    BZ6_RndPrimLoad(&PrH, "Harley.obj");
-    BZ6_RndPrimCreateBase(&PrBase, VecSet1(0), VecSet(1, 0, 0), VecSet(0, 0, 1), 5, 8, 10, 15);
+    BZ6_AnimInit(hWnd);
     SetTimer(hWnd, 30, 1, NULL);
     return 0;
 
   case WM_SIZE:
-    BZ6_RndResize(LOWORD(lParam), HIWORD(lParam));
+    BZ6_AnimResize(LOWORD(lParam), HIWORD(lParam));
     
     /* Redraw frame */
     SendMessage(hWnd, WM_TIMER, 0, 0);
     return 0;
 
   case WM_TIMER:
-    BZ6_RndStart();
-    BZ6_RndCamSet(VecSet(100 * sin(t), 120, 100 * cos(t)), VecSet(0, 55, 0), VecSet(0, 1, 0));
-    BZ6_RndPrimDraw(&PrF, MatrMulMatr3(MatrTranslate(VecSet(0, 0, -60)), MatrRotateY(0), MatrScale(VecSet1(0.5))));
-    BZ6_RndPrimDraw(&PrH, MatrMulMatr4(MatrRotateX(-90), MatrRotateY(180), MatrTranslate(VecSet(0, 0, 60)), MatrScale(VecSet1(0.5))));
-    BZ6_RndPrimDraw(&PrBase, MatrIdentity());
-    BZ6_RndEnd();
+    BZ6_AnimRender();
     InvalidateRect(hWnd, NULL, TRUE);
     return 0;
 
   case WM_PAINT:
     hDC = BeginPaint(hWnd, &ps);
-    BZ6_RndCopyFrame(hDC);
+    BZ6_AnimCopyFrame(hDC);
     EndPaint(hWnd, &ps);
     return 0;
 
   case WM_ERASEBKGND:
     return 1;
 
-  case WM_DESTROY:
-    BZ6_RndPrimFree(&PrF);
-    BZ6_RndPrimFree(&PrH);
-    BZ6_RndPrimFree(&PrBase);
-    BZ6_RndClose();
-    KillTimer(hWnd, 30);
-    PostMessage(hWnd, WM_QUIT, 0, 0);
+  case WM_KEYDOWN:
+    if (wParam == 'F')
+      BZ6_AnimFlipFullScreen();
+    else if (wParam == 27)
+      BZ6_AnimExit();
     return 0;
 
-  case WM_KEYDOWN:
+  case WM_DESTROY:
+    BZ6_AnimClose();
+    KillTimer(hWnd, 30);
+    PostMessage(hWnd, WM_QUIT, 0, 0);
     return 0;
   }
   return DefWindowProc(hWnd, Msg, wParam, lParam);
