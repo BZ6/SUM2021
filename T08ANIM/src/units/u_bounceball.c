@@ -1,7 +1,7 @@
-/* FILE NAME: u_ball.c
+/* FILE NAME: u_bounceball.c
  * PROGRAMMER: BZ6
  * DATE: 19.06.2021
- * PURPOSE: 3D animation ball function module.
+ * PURPOSE: 3D animation bounce ball function module.
  */
 
 #include <time.h>
@@ -13,9 +13,9 @@ typedef struct
   VEC Pos;
   bz6PRIM Pr;
   DBL t;
-} bz6UNIT_BALL;
+} bz6UNIT_BOUNCE_BALL;
 
-/* Unit ball initialization function.
+/* Unit bounce ball unit initialization function.
  * ARGUMENTS:
  *   - self-pointer to unit object:
  *       bz6UNIT_BALL *Uni;
@@ -23,14 +23,14 @@ typedef struct
  *       bz6ANIM *Ani;
  * RETURNS: None.
  */
-static VOID BZ6_UnitInit( bz6UNIT_BALL *Uni, bz6ANIM *Ani )
+static VOID BZ6_UnitInit( bz6UNIT_BOUNCE_BALL *Uni, bz6ANIM *Ani )
 {
   Uni->t = 0;
   BZ6_RndPrimCreateSphere(&Uni->Pr, Uni->Pos, 0.5, 30, 20);
   Uni->Pos = VecSet1(0);
 } /* End of 'BZ6_UnitInit' function */
 
-/* Unit ball inter frame events handle function.
+/* Unit bounce ball inter frame events handle function.
  * ARGUMENTS:
  *   - self-pointer to unit object:
  *       bz6UNIT_BALL *Uni;
@@ -38,12 +38,12 @@ static VOID BZ6_UnitInit( bz6UNIT_BALL *Uni, bz6ANIM *Ani )
  *       bz6ANIM *Ani;
  * RETURNS: None.
  */
-static VOID BZ6_UnitResponse( bz6UNIT_BALL *Uni, bz6ANIM *Ani )
+static VOID BZ6_UnitResponse( bz6UNIT_BOUNCE_BALL *Uni, bz6ANIM *Ani )
 {
-  Uni->t = clock() / 20.0;
+  Uni->t = clock() / 200.0;
 } /* End of 'BZ6_UnitResponse' function */
 
-/* Unit ball render function.
+/* Unit bounce ball render function.
  * ARGUMENTS:
  *   - self-pointer to unit object:
  *       bz6UNIT_BALL *Uni;
@@ -51,12 +51,12 @@ static VOID BZ6_UnitResponse( bz6UNIT_BALL *Uni, bz6ANIM *Ani )
  *       bz6ANIM *Ani;
  * RETURNS: None.
  */
-static VOID BZ6_UnitRender( bz6UNIT_BALL *Uni, bz6ANIM *Ani )
+static VOID BZ6_UnitRender( bz6UNIT_BOUNCE_BALL *Uni, bz6ANIM *Ani )
 {
-  BZ6_RndPrimDraw(&Uni->Pr, MatrMulMatr(MatrRotate(Uni->t, VecSet1(1)), MatrTranslate(VecSet(1, 0, 0))));
+  BZ6_RndPrimDraw(&Uni->Pr, MatrTranslate(VecSet(-2, 1.7 * fabs(sin(Uni->t)), 0)));
 } /* End of 'BZ6_UnitRender' function */
 
-/* Unit ball deinitialization function.
+/* Unit bounce ball deinitialization function.
  * ARGUMENTS:
  *   - self-pointer to unit object:
  *       bz6UNIT_BALL *Uni;
@@ -64,21 +64,21 @@ static VOID BZ6_UnitRender( bz6UNIT_BALL *Uni, bz6ANIM *Ani )
  *       bz6ANIM *Ani;
  * RETURNS: None.
  */
-static VOID BZ6_UnitClose( bz6UNIT_BALL *Uni, bz6ANIM *Ani )
+static VOID BZ6_UnitClose( bz6UNIT_BOUNCE_BALL *Uni, bz6ANIM *Ani )
 {
   BZ6_RndPrimFree(&Uni->Pr);
 } /* End of 'BZ6_UnitClose' function */
 
-/* Unit ball creation function.
+/* Unit bounce ball creation function.
  * ARGUMENTS: None.
  * RETURNS:
  *   (bz6UNIT *) pointer to created unit.
  */
-bz6UNIT * BZ6_UnitCreateBall( VOID )
+bz6UNIT * BZ6_UnitCreateBounceBall( VOID )
 {
   bz6UNIT *Uni;
 
-  if ((Uni = (bz6UNIT *)BZ6_AnimUnitCreate(sizeof(bz6UNIT_BALL))) == NULL)
+  if ((Uni = (bz6UNIT *)BZ6_AnimUnitCreate(sizeof(bz6UNIT_BOUNCE_BALL))) == NULL)
     return NULL;
 
   /* Setup unit methods */
@@ -88,6 +88,6 @@ bz6UNIT * BZ6_UnitCreateBall( VOID )
   Uni->Close = (VOID *)BZ6_UnitClose;
 
   return Uni;
-} /* End of 'BZ6_UnitCreateBall' function */
+} /* End of 'BZ6_UnitCreateBounceBall' function */
 
-/* END OF 'u_ball.c' FILE */
+/* END OF 'u_bounceball.c' FILE */

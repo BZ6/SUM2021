@@ -68,7 +68,9 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   ShowWindow(hWnd, CmdShow);
   UpdateWindow(hWnd);
 
+  BZ6_AnimAddUnit( BZ6_UnitCreatePlane());
   BZ6_AnimAddUnit( BZ6_UnitCreateBall());
+  BZ6_AnimAddUnit( BZ6_UnitCreateBounceBall());
 
   /* Message loop */
   while (TRUE)

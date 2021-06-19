@@ -16,6 +16,20 @@
  */
 bz6UNIT * BZ6_UnitCreateBall( VOID );
 
+/* Unit bounce ball creation function.
+ * ARGUMENTS: None.
+ * RETURNS:
+ *   (bz6UNIT *) pointer to created unit.
+ */
+bz6UNIT * BZ6_UnitCreateBounceBall( VOID );
+
+/* Unit plane creation function.
+ * ARGUMENTS: None.
+ * RETURNS:
+ *   (bz6UNIT *) pointer to created unit.
+ */
+bz6UNIT * BZ6_UnitCreatePlane( VOID );
+
 #endif /* __units_h_ */
 
 /* END OF 'units.h' FILE */

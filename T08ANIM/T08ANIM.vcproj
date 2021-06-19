@@ -242,6 +242,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\units\u_bounceball.c"
+					>
+				</File>
+				<File
+					RelativePath=".\src\units\u_plane.c"
+					>
+				</File>
+				<File
 					RelativePath=".\src\units\units.h"
 					>
 				</File>
