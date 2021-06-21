@@ -23,7 +23,7 @@ extern HDC BZ6_hRndDC;                   /* Render window device context */
 extern HGLRC BZ6_hRndGLRC;               /* OpenGL render window device context  */
 extern INT BZ6_RndFrameW, BZ6_RndFrameH; /* Work window size */
 
-extern DBL
+extern FLT
   BZ6_RndProjSize,     /* Project plane fit square */
   BZ6_RndProjDist,     /* Distance to project plane from viewer (near) */
   BZ6_RndProjFarClip;  /* Distance to project far clip plane (far) */

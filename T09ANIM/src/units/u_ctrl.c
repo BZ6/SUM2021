@@ -12,7 +12,6 @@ typedef struct
   BZ6_UNIT_BASE_FIELDS;
   VEC Pos;
   VEC CamDir;
-  VEC At;
   DBL Speed;
   DBL AngleSpeed;
   VEC CamRight;
@@ -30,7 +29,6 @@ static VOID BZ6_UnitInit( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
 {
   Uni->Pos = VecSet(0, 0, 5);
   Uni->CamDir = VecSet(0, 0, -5);
-  Uni->At = VecSet1(0);
   Uni->CamRight = VecSet(5, 0, 0);
   Uni->Speed = 2;
   Uni->AngleSpeed = 90;
@@ -61,23 +59,23 @@ static VOID BZ6_UnitResponse( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
   Uni->Pos =
     PointTransform(Uni->Pos,
       MatrRotateY(Ani->Keys[VK_LBUTTON] *
-      Ani->DeltaTime * Uni->AngleSpeed / 9 * Ani->Mdx));
+      Ani->DeltaTime * Uni->AngleSpeed * Ani->Mdx));
   
   Uni->CamRight = VecMulMatr(Uni->CamRight, MatrRotateY(Ani->Keys[VK_LBUTTON] *
-      Ani->DeltaTime * Uni->AngleSpeed / 9 * Ani->Mdx));
+      Ani->DeltaTime * Uni->AngleSpeed * Ani->Mdx));
   Uni->CamDir = VecMulMatr(Uni->CamDir, MatrRotateY(Ani->Keys[VK_LBUTTON] *
-      Ani->DeltaTime * Uni->AngleSpeed / 9 * Ani->Mdx));
+      Ani->DeltaTime * Uni->AngleSpeed * Ani->Mdx));
+
+  Uni->CamRight = VectorTransform(Uni->CamRight, MatrRotate(-Ani->DeltaTime * Uni->AngleSpeed * Ani->JR, VecCrossVec(Uni->CamRight, Uni->CamDir)));
+  Uni->CamDir = VectorTransform(Uni->CamDir, MatrRotate(-Ani->DeltaTime * Uni->AngleSpeed * Ani->JR, VecCrossVec(Uni->CamRight, Uni->CamDir)));
 
   Uni->Pos =
-    PointTransform(Uni->Pos,
-      MatrRotateY(Ani->DeltaTime * Uni->AngleSpeed * Ani->JX));
-
-  Uni->CamRight = VecMulMatr(Uni->CamRight, MatrRotateY(Ani->DeltaTime * Uni->AngleSpeed * Ani->JX));
-  Uni->CamDir = VecMulMatr(Uni->CamDir, MatrRotateY(Ani->DeltaTime * Uni->AngleSpeed * Ani->JX));
+    VecAddVec(Uni->Pos,
+    VecMulNum(VecCrossVec(Uni->CamRight, Uni->CamDir), -Ani->DeltaTime * Uni->Speed / 10 * Ani->JY));
 
   Uni->Pos =
-    PointTransform(Uni->Pos,
-    MatrRotate(Ani->DeltaTime * Uni->AngleSpeed * Ani->JY, Uni->CamRight));
+    VecAddVec(Uni->Pos,
+    VecMulNum(Uni->CamRight, Ani->DeltaTime * Uni->Speed * Ani->JX));
 
   Uni->Pos =
     VecAddVec(Uni->Pos,
@@ -98,7 +96,7 @@ static VOID BZ6_UnitRender( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
 
   sprintf(Buf, "FPS: %.3f", Ani->FPS);
   SetWindowText(Ani->hWnd, Buf);
-  BZ6_RndCamSet(Uni->Pos, Uni->At, VecSet(0, 1, 0));
+  BZ6_RndCamSet(Uni->Pos, VecAddVec(Uni->CamDir, Uni->Pos), VecSet(0, 1, 0));
 } /* End of 'BZ6_UnitRender' function */
 
 /* Unit plane deinitialization function.

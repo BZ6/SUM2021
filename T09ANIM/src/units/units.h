@@ -37,6 +37,13 @@ bz6UNIT * BZ6_UnitCreatePlane( VOID );
  */
 bz6UNIT * BZ6_UnitCreateCtrl( VOID );
 
+/* Unit cow creation function.
+ * ARGUMENTS: None.
+ * RETURNS:
+ *   (bz6UNIT *) pointer to created unit.
+ */
+bz6UNIT * BZ6_UnitCreateCow( VOID );
+
 #endif /* __units_h_ */
 
 /* END OF 'units.h' FILE */

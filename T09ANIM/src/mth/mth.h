@@ -15,7 +15,7 @@
 #define PI 3.14159265358979323846
 
 /* Degrees to radians conversion */
-#define D2R(A) ((A) * (PI / 180.0))
+#define D2R(A) ((A) * (PI / 180))
 #define Degree2Radian(a) D2R(a)
 
 /* Matrixes multiplies */
@@ -204,7 +204,7 @@ __inline FLT VecLen( VEC V )
 
   if (len == 1 || len == 0)
     return len;
-  return sqrt(len);
+  return sqrtf(len);
 } /* End of 'VecLen' function */
 
 /* Normalized vector function.
@@ -220,7 +220,7 @@ __inline VEC VecNormalize( VEC V )
 
   if (len == 1 || len == 0)
     return V;
-  return VecDivNum(V, sqrt(len));
+  return VecDivNum(V, sqrtf(len));
 } /* End of 'VecNormalize' function */
 
 /* Matrix initialization function.
