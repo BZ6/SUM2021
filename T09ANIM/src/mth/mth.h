@@ -33,13 +33,13 @@ typedef FLOAT FLT;
 /* Vector type */
 typedef struct tagVEC
 {
-  DBL X, Y, Z;
+  FLT X, Y, Z;
 } VEC;
 
 /* Matrix type */
 typedef struct tagMATR
 {
-  DBL A[4][4];
+  FLT A[4][4];
 } MATR;
 
 static MATR UnitMatrix =
@@ -65,11 +65,11 @@ __inline MATR MatrIdentity( VOID )
 /* Vector initialization function.
  * ARGUMENTS:
  *   - coordinates to vector:
- *       DBL X, Y, Z;
+ *       FLT X, Y, Z;
  * RETURNS:
  *   (VEC) result vector.
  */
-__inline VEC VecSet( DBL X, DBL Y, DBL Z )
+__inline VEC VecSet( FLT X, FLT Y, FLT Z )
 {
   VEC v;
 
@@ -120,11 +120,11 @@ __inline VEC VecDivVec( VEC V1, VEC V2 )
  *   - vectors to be mul:
  *       VEC V;
  *   - number to mul:
- *       DBL N;
+ *       FLT N;
  * RETURNS:
  *   (VEC) result vector.
  */
-__inline VEC VecMulNum( VEC V, DBL N )
+__inline VEC VecMulNum( VEC V, FLT N )
 {
   return VecSet(V.X * N, V.Y * N, V.Z * N);
 } /* End of 'VecMulNum' function */
@@ -134,11 +134,11 @@ __inline VEC VecMulNum( VEC V, DBL N )
  *   - vector to be div:
  *       VEC V;
  *   - number to mul:
- *       DBL N;
+ *       FLT N;
  * RETURNS:
  *   (VEC) result vector.
  */
-__inline VEC VecDivNum( VEC V, DBL N )
+__inline VEC VecDivNum( VEC V, FLT N )
 {
   return VecSet(V.X / N, V.Y / N, V.Z / N);
 } /* End of 'VecDivNum' function */
@@ -148,9 +148,9 @@ __inline VEC VecDivNum( VEC V, DBL N )
  *   - vectors to be add:
  *       VEC V1, V2;
  * RETURNS:
- *   (DBL) dot product.
+ *   (FLT) dot product.
  */
-__inline DBL VecDotVec( VEC V1, VEC V2 )
+__inline FLT VecDotVec( VEC V1, VEC V2 )
 {
   return V1.X * V2.X + V1.Y * V2.Y + V1.Z * V2.Z;
 } /* End of 'VecDotVec' function */
@@ -184,9 +184,9 @@ __inline VEC VecNeg( VEC V )
  *   - vector to be lengthed:
  *       VEC V;
  * RETURNS:
- *   (DBL) length in square vector.
+ *   (FLT) length in square vector.
  */
-__inline DBL VecLen2( VEC V )
+__inline FLT VecLen2( VEC V )
 {
   return VecDotVec(V, V);
 } /* End of 'VecLen2' function */
@@ -196,11 +196,11 @@ __inline DBL VecLen2( VEC V )
  *   - vector to be lengthed:
  *       VEC V;
  * RETURNS:
- *   (DBL) length vector.
+ *   (FLT) length vector.
  */
-__inline DBL VecLen( VEC V )
+__inline FLT VecLen( VEC V )
 {
-  DBL len = VecDotVec(V, V);
+  FLT len = VecDotVec(V, V);
 
   if (len == 1 || len == 0)
     return len;
@@ -216,7 +216,7 @@ __inline DBL VecLen( VEC V )
  */
 __inline VEC VecNormalize( VEC V )
 {
-  DBL len = VecDotVec(V, V);
+  FLT len = VecDotVec(V, V);
 
   if (len == 1 || len == 0)
     return V;
@@ -226,15 +226,15 @@ __inline VEC VecNormalize( VEC V )
 /* Matrix initialization function.
  * ARGUMENTS:
  *   - numbers for matrix:
- *       DBL A00, A01, A02, A03, A10, A11, A12, A13,
+ *       FLT A00, A01, A02, A03, A10, A11, A12, A13,
  *           A20, A21, A22, A23, A30, A31, A32, A33;
  * RETURNS:
  *   (MATR) result matrix.
  */
-__inline MATR MatrSet( DBL A00, DBL A01, DBL A02, DBL A03,
-                       DBL A10, DBL A11, DBL A12, DBL A13,
-                       DBL A20, DBL A21, DBL A22, DBL A23,
-                       DBL A30, DBL A31, DBL A32, DBL A33 )
+__inline MATR MatrSet( FLT A00, FLT A01, FLT A02, FLT A03,
+                       FLT A10, FLT A11, FLT A12, FLT A13,
+                       FLT A20, FLT A21, FLT A22, FLT A23,
+                       FLT A30, FLT A31, FLT A32, FLT A33 )
 {
   MATR r =
   {
@@ -297,13 +297,13 @@ __inline MATR MatrTranspose( MATR M )
 /* Rotate by X function.
  * ARGUMENTS:
  *   - Angle in degrees:
- *       DBL AngleInDegree;
+ *       FLT AngleInDegree;
  * RETURNS:
  *   (MATR) result matrix.
  */
-__inline MATR MatrRotateX( DBL AngleInDegree )
+__inline MATR MatrRotateX( FLT AngleInDegree )
 {
-  DBL a = D2R(AngleInDegree), s = sin(a), c = cos(a);
+  FLT a = D2R(AngleInDegree), s = sin(a), c = cos(a);
 
   return MatrSet(1, 0, 0, 0,
                  0, c, s, 0,
@@ -314,13 +314,13 @@ __inline MATR MatrRotateX( DBL AngleInDegree )
 /* Rotate by Y function.
  * ARGUMENTS:
  *   - Angle in degrees:
- *       DBL AngleInDegree;
+ *       FLT AngleInDegree;
  * RETURNS:
  *   (MATR) result matrix.
  */
-__inline MATR MatrRotateY( DBL AngleInDegree )
+__inline MATR MatrRotateY( FLT AngleInDegree )
 {
-  DBL a = D2R(AngleInDegree), s = sin(a), c = cos(a);
+  FLT a = D2R(AngleInDegree), s = sin(a), c = cos(a);
 
   return MatrSet(c, 0, -s, 0,
                  0, 1, 0, 0,
@@ -331,13 +331,13 @@ __inline MATR MatrRotateY( DBL AngleInDegree )
 /* Rotate by Z function.
  * ARGUMENTS:
  *   - Angle in degrees:
- *       DBL AngleInDegree;
+ *       FLT AngleInDegree;
  * RETURNS:
  *   (MATR) result matrix.
  */
-__inline MATR MatrRotateZ( DBL AngleInDegree )
+__inline MATR MatrRotateZ( FLT AngleInDegree )
 {
-  DBL a = D2R(AngleInDegree), s = sin(a), c = cos(a);
+  FLT a = D2R(AngleInDegree), s = sin(a), c = cos(a);
 
   return MatrSet(c, s, 0, 0,
                  -s, c, 0, 0,
@@ -348,15 +348,15 @@ __inline MATR MatrRotateZ( DBL AngleInDegree )
 /* Rotate by V function.
  * ARGUMENTS:
  *   - Angle in degrees:
- *       DBL AngleInDegree;
+ *       FLT AngleInDegree;
  *   - vector rotated by:
  *       VEC V;
  * RETURNS:
  *   (MATR) result matrix.
  */
-__inline MATR MatrRotate( DBL AngleInDegree, VEC V )
+__inline MATR MatrRotate( FLT AngleInDegree, VEC V )
 {
-  DBL a = D2R(AngleInDegree), s = sin(a), c = cos(a);
+  FLT a = D2R(AngleInDegree), s = sin(a), c = cos(a);
   VEC A = VecNormalize(V);
 
   return MatrSet(c + A.X * A.X * (1 - c), A.X * A.Y * (1 - c) + A.Z * s, A.X * A.Z * (1 - c) - A.Y * s, 0,
@@ -406,7 +406,7 @@ __inline MATR MatrMulMatr( MATR M1, MATR M2 )
  */
 __inline VEC VecMulMatr( VEC V, MATR M ) 
 {
-  DBL w = V.X * M.A[0][3] + V.Y * M.A[1][3] + V.Z * M.A[2][3] + M.A[3][3];
+  FLT w = V.X * M.A[0][3] + V.Y * M.A[1][3] + V.Z * M.A[2][3] + M.A[3][3];
 
   return VecSet((V.X * M.A[0][0] + V.Y * M.A[1][0] + V.Z * M.A[2][0] + M.A[3][0]) / w, 
                 (V.X * M.A[0][1] + V.Y * M.A[1][1] + V.Z * M.A[2][1] + M.A[3][1]) / w,
@@ -448,15 +448,15 @@ __inline VEC VectorTransform( VEC V, MATR M )
 /* Determinant of matrix 3x3 function.
  * ARGUMENTS:
  *   - numbers in matrix 3x3:
- *       DBL A11, A12, A13,
+ *       FLT A11, A12, A13,
  *           A21, A22, A23,
  *           A31, A32, A33;
  * RETURNS:
- *   (DBL) determinant of matrix 3x3.
+ *   (FLT) determinant of matrix 3x3.
  */
-__inline DBL MatrDeterm3x3( DBL A11, DBL A12, DBL A13,
-                   DBL A21, DBL A22, DBL A23,
-                   DBL A31, DBL A32, DBL A33 )
+__inline FLT MatrDeterm3x3( FLT A11, FLT A12, FLT A13,
+                   FLT A21, FLT A22, FLT A23,
+                   FLT A31, FLT A32, FLT A33 )
 {
   return A11 * A22 * A33 + A12 * A23 * A31 + A13 * A21 * A32 -
          A11 * A23 * A32 - A12 * A21 * A33 - A13 * A22 * A31;
@@ -467,9 +467,9 @@ __inline DBL MatrDeterm3x3( DBL A11, DBL A12, DBL A13,
  *   - matrix to be calculated determinent:
  *       MATR M;
  * RETURNS:
- *   (DBL) determinant of matrix.
+ *   (FLT) determinant of matrix.
  */
-__inline DBL MatrDeterm( MATR M )
+__inline FLT MatrDeterm( MATR M )
 {
   return
     +M.A[0][0] * MatrDeterm3x3(M.A[1][1], M.A[1][2], M.A[1][3],
@@ -495,7 +495,7 @@ __inline DBL MatrDeterm( MATR M )
  */
 __inline MATR MatrInverse( MATR M )
 {
-  DBL det = MatrDeterm(M);
+  FLT det = MatrDeterm(M);
 
   if (det == 0)
     return MatrIdentity();
@@ -581,7 +581,7 @@ __inline MATR MatrView( VEC Loc, VEC At, VEC Up1 )
  * RETURNS:
  *   (MATR) result matrix.
  */
-__inline MATR MatrFrustum( DBL l, DBL r, DBL b, DBL t, DBL n, DBL f )
+__inline MATR MatrFrustum( FLT l, FLT r, FLT b, FLT t, FLT n, FLT f )
 {
   return MatrSet(2 * n /(r - l), 0, 0, 0, 
                  0, 2 * n /(t - b), 0, 0, 

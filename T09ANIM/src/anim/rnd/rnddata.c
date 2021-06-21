@@ -8,8 +8,8 @@
 
 /* Global rendering data */
 HWND BZ6_hRndWnd;                 /* Work window handle */
-HDC BZ6_hRndDCFrame;              /* Work window memory device context  */
-HBITMAP BZ6_hRndBmFrame;          /* Work window background bitmap handle */
+HGLRC BZ6_hRndGLRC;               /* OpenGL render window device context  */
+HDC BZ6_hRndDC;                   /* Render window device context */
 INT BZ6_RndFrameW, BZ6_RndFrameH; /* Work window size */
 
 DBL

@@ -63,29 +63,16 @@ VOID BZ6_RndPrimDraw( bz6PRIM *Pr, MATR World )
 {
   INT i;
   MATR wvp = MatrMulMatr3(Pr->Trans, World, BZ6_RndMatrVP);
-  POINT *pnts;
 
-  if ((pnts = malloc(sizeof(POINT) * Pr->NumOfV)) == NULL)
-    return;
-
-  /* Build projection */
-  for (i = 0; i < Pr->NumOfV; i++)
-  {
-    VEC p = VecMulMatr(Pr->V[i].P, wvp);
-
-    pnts[i].x = (INT)((p.X + 1) * BZ6_RndFrameW / 2);
-    pnts[i].y = (INT)((-p.Y + 1) * BZ6_RndFrameH / 2);
-  }
+  /* Send matrix to OpenGL /v.1.0 */
+  glLoadMatrixf(wvp.A[0]);
 
   /* Draw triangles */
-  for (i = 0; i < Pr->NumOfI; i += 3)
-  {
-    MoveToEx(BZ6_hRndDCFrame, pnts[Pr->I[i]].x, pnts[Pr->I[i]].y, NULL);
-    LineTo(BZ6_hRndDCFrame, pnts[Pr->I[i + 1]].x, pnts[Pr->I[i + 1]].y);
-    LineTo(BZ6_hRndDCFrame, pnts[Pr->I[i + 2]].x, pnts[Pr->I[i + 2]].y);
-    LineTo(BZ6_hRndDCFrame, pnts[Pr->I[i]].x, pnts[Pr->I[i]].y);
-  }
-  free(pnts);
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  glBegin(GL_TRIANGLES);
+  for (i = 0; i < Pr->NumOfI; i++)
+    glVertex3fv(&Pr->V[Pr->I[i]].P.X);
+  glEnd();
 } /* End of 'BZ6_RndPrimDraw' function */
 
 /* Rendering draw sphere function.

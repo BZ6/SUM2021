@@ -7,14 +7,20 @@
 #ifndef __rnd_h_
 #define __rnd_h_
 
+#define GLEW_STATIC
+#include <glew.h>
+
 #include "../../def.h"
 
+#include <wglew.h>
+#include <gl/wglext.h>
 
+#pragma comment(lib, "opengl32")
 
 /* Global rendering data */
 extern HWND BZ6_hRndWnd;                 /* Work window handle */
-extern HDC BZ6_hRndDCFrame;              /* Work window memory device context  */
-extern HBITMAP BZ6_hRndBmFrame;          /* Work window background bitmap handle */
+extern HDC BZ6_hRndDC;                   /* Render window device context */
+extern HGLRC BZ6_hRndGLRC;               /* OpenGL render window device context  */
 extern INT BZ6_RndFrameW, BZ6_RndFrameH; /* Work window size */
 
 extern DBL
@@ -88,7 +94,7 @@ VOID BZ6_RndResize( INT W, INT H );
  * RETURNS:
  *   NONE.
  */
-VOID BZ6_RndCopyFrame( HDC hDC );
+VOID BZ6_RndCopyFrame( VOID );
 
 /* Rendering look-at viewer setup function.
  * ARGUMENTS:

@@ -15,12 +15,75 @@
  */
 VOID BZ6_RndInit( HWND hWnd )
 {
-  HDC hDC = GetDC(hWnd);
+  INT i, nums;
+  PIXELFORMATDESCRIPTOR pfd = {0};
+  HGLRC hRC;
+  INT PixelAttribs[] =
+  {
+    WGL_DRAW_TO_WINDOW_ARB, TRUE,
+    WGL_SUPPORT_OPENGL_ARB, TRUE,
+    WGL_DOUBLE_BUFFER_ARB, TRUE,
+    WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
+    WGL_ACCELERATION_ARB, WGL_FULL_ACCELERATION_ARB,
+    WGL_COLOR_BITS_ARB, 32,
+    WGL_DEPTH_BITS_ARB, 32,
+    0
+  };
+  INT ContextAttribs[] =
+  {
+    WGL_CONTEXT_MAJOR_VERSION_ARB, 4,
+    WGL_CONTEXT_MINOR_VERSION_ARB, 6,
+    WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB,
+                                  /* WGL_CONTEXT_CORE_PROFILE_BIT_ARB, */
+    0
+  };
 
   BZ6_hRndWnd = hWnd;
-  BZ6_hRndDCFrame = CreateCompatibleDC(hDC);
-  ReleaseDC(BZ6_hRndWnd, hDC);
-  BZ6_hRndBmFrame = NULL;
+  BZ6_hRndDC = GetDC(hWnd);
+
+  /* OpenGL init: pixel format setup */
+  pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+  pfd.nVersion = 1;
+  pfd.dwFlags = PFD_DOUBLEBUFFER | PFD_SUPPORT_OPENGL;
+  pfd.cColorBits = 32;
+  pfd.cDepthBits = 32;
+  i = ChoosePixelFormat(BZ6_hRndDC, &pfd);
+  DescribePixelFormat(BZ6_hRndDC, i, sizeof(PIXELFORMATDESCRIPTOR), &pfd);
+  SetPixelFormat(BZ6_hRndDC, i, &pfd);
+
+  /* OpenGL init: setup rendering context */
+  BZ6_hRndGLRC = wglCreateContext(BZ6_hRndDC);
+  wglMakeCurrent(BZ6_hRndDC, BZ6_hRndGLRC);
+
+  /* Initializing GLEW library */
+  if (glewInit() != GLEW_OK)
+  {
+    MessageBox(BZ6_hRndWnd, "Error extensions initializing", "Error",
+      MB_ICONERROR | MB_OK);
+    exit(0);
+  }
+
+  if (!(GLEW_ARB_vertex_shader && GLEW_ARB_fragment_shader))
+  {
+    MessageBox(BZ6_hRndWnd, "Error: no shaders support", "Error", MB_ICONERROR | MB_OK);
+    exit(0);
+  }
+
+  /* Enable a new OpenGL profile support */
+  wglChoosePixelFormatARB(BZ6_hRndDC, PixelAttribs, NULL, 1, &i, &nums);
+  hRC = wglCreateContextAttribsARB(BZ6_hRndDC, NULL, ContextAttribs);
+
+  wglMakeCurrent(NULL, NULL);
+  wglDeleteContext(BZ6_hRndGLRC);
+
+  BZ6_hRndGLRC = hRC;
+  wglMakeCurrent(BZ6_hRndDC, BZ6_hRndGLRC);
+  /* Set default OpenGL parameters */
+  glEnable(GL_DEPTH_TEST);
+  wglSwapIntervalEXT(0);
+
+  BZ6_hRndWnd = hWnd;
+
   BZ6_RndFrameW = BZ6_RndFrameH = 100;
   BZ6_RndMatrView = MatrIdentity();
   BZ6_RndMatrProj = MatrIdentity();
@@ -36,10 +99,9 @@ VOID BZ6_RndInit( HWND hWnd )
  */
 VOID BZ6_RndClose( VOID )
 {
-  SelectObject(BZ6_hRndDCFrame, GetStockObject(DC_PEN));
-  SelectObject(BZ6_hRndDCFrame, GetStockObject(DC_BRUSH));
-  DeleteDC(BZ6_hRndDCFrame);
-  DeleteObject(BZ6_hRndBmFrame);
+  wglMakeCurrent(NULL, NULL);
+  wglDeleteContext(BZ6_hRndGLRC);
+  ReleaseDC(BZ6_hRndWnd, BZ6_hRndDC);
 } /* End of 'BZ6_RndClose' function */
 
 /* Rendering projection set function.
@@ -75,13 +137,7 @@ VOID BZ6_RndProjSet( VOID )
  */
 VOID BZ6_RndResize( INT W, INT H )
 {
-  HDC hDC = GetDC(BZ6_hRndWnd);
-
-  if (BZ6_hRndBmFrame)
-    DeleteObject(BZ6_hRndBmFrame);
-  BZ6_hRndBmFrame = CreateCompatibleBitmap(hDC, W, H);
-  ReleaseDC(BZ6_hRndWnd, hDC);
-  SelectObject(BZ6_hRndDCFrame, BZ6_hRndBmFrame);
+  glViewport(0, 0, W, H);
 
   /* Save size */
   BZ6_RndFrameW = W;
@@ -98,10 +154,9 @@ VOID BZ6_RndResize( INT W, INT H )
  * RETURNS:
  *   NONE.
  */
-VOID BZ6_RndCopyFrame( HDC hDC )
+VOID BZ6_RndCopyFrame( VOID )
 {
-  BitBlt(hDC, 0, 0, BZ6_RndFrameW, BZ6_RndFrameH,
-    BZ6_hRndDCFrame, 0, 0, SRCCOPY);
+  SwapBuffers(BZ6_hRndDC);
 } /* End of 'BZ6_RndCopyFrame' function */
 
 /* Rendering look-at viewer setup function.
@@ -125,14 +180,8 @@ VOID BZ6_RndCamSet( VEC Loc, VEC At, VEC Up )
  */
 VOID BZ6_RndStart( VOID )
 { 
-  static CHAR Buf[100];
-
-  SelectObject(BZ6_hRndDCFrame, GetStockObject(WHITE_PEN));
-  SelectObject(BZ6_hRndDCFrame, GetStockObject(WHITE_BRUSH));
-  Rectangle(BZ6_hRndDCFrame, 0, 0, BZ6_RndFrameW, BZ6_RndFrameH);
-  
-  SelectObject(BZ6_hRndDCFrame, GetStockObject(BLACK_PEN));
-  SelectObject(BZ6_hRndDCFrame, GetStockObject(BLACK_BRUSH));
+  /* Clear frame */
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 } /* End of 'BZ6_RndStart' function */
 
 /* Rendering end function.
@@ -143,6 +192,7 @@ VOID BZ6_RndStart( VOID )
  */
 VOID BZ6_RndEnd( VOID )
 {
+  glFinish();
 } /* End of 'BZ6_RndEnd' function */
 
 /* END OF 'rndbase.c' FILE */

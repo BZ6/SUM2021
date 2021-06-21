@@ -101,9 +101,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
  */
 LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam )
 {
-  HDC hDC;
   PAINTSTRUCT ps;
-  static bz6PRIM PrF, PrH, PrBase;
 
   switch (Msg)
   {
@@ -121,7 +119,7 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
     BZ6_AnimResize(LOWORD(lParam), HIWORD(lParam));
     
     /* Redraw frame */
-    SendMessage(hWnd, WM_TIMER, 0, 0);
+    SendMessage(hWnd, WM_TIMER, 30, 0);
     return 0;
 
   case WM_TIMER:
@@ -130,8 +128,8 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
     return 0;
 
   case WM_PAINT:
-    hDC = BeginPaint(hWnd, &ps);
-    BZ6_AnimCopyFrame(hDC);
+    BeginPaint(hWnd, &ps);
+    BZ6_AnimCopyFrame();
     EndPaint(hWnd, &ps);
     return 0;
 
@@ -141,8 +139,6 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
   case WM_KEYDOWN:
     if (wParam == 'F')
       BZ6_AnimFlipFullScreen();
-    else if (wParam == 'P')
-      BZ6_Anim.IsPause = !BZ6_Anim.IsPause;
     else if (wParam == 27)
       BZ6_AnimExit();
     return 0;

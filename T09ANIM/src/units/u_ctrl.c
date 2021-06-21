@@ -46,41 +46,42 @@ static VOID BZ6_UnitInit( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
  */
 static VOID BZ6_UnitResponse( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
 {
-  
+  if (Ani->KeysClick['P'])
+      BZ6_Anim.IsPause = !BZ6_Anim.IsPause;
 
   Uni->Pos =
     VecAddVec(Uni->Pos,
-      VecMulNum(Uni->CamDir, Ani->GlobalDeltaTime * Uni->Speed *
+      VecMulNum(Uni->CamDir, Ani->DeltaTime * Uni->Speed *
         (Ani->Keys[VK_UP] - Ani->Keys[VK_DOWN])));
 
   Uni->Pos =
     VecAddVec(Uni->Pos,
-      VecMulNum(Uni->CamDir, Ani->GlobalDeltaTime * Uni->Speed / 10 * Ani->Mdz));
+      VecMulNum(Uni->CamDir, Ani->DeltaTime * Uni->Speed / 10 * Ani->Mdz));
 
   Uni->Pos =
     PointTransform(Uni->Pos,
       MatrRotateY(Ani->Keys[VK_LBUTTON] *
-      Ani->GlobalDeltaTime * Uni->AngleSpeed / 9 * Ani->Mdx));
+      Ani->DeltaTime * Uni->AngleSpeed / 9 * Ani->Mdx));
   
   Uni->CamRight = VecMulMatr(Uni->CamRight, MatrRotateY(Ani->Keys[VK_LBUTTON] *
-      Ani->GlobalDeltaTime * Uni->AngleSpeed / 9 * Ani->Mdx));
+      Ani->DeltaTime * Uni->AngleSpeed / 9 * Ani->Mdx));
   Uni->CamDir = VecMulMatr(Uni->CamDir, MatrRotateY(Ani->Keys[VK_LBUTTON] *
-      Ani->GlobalDeltaTime * Uni->AngleSpeed / 9 * Ani->Mdx));
+      Ani->DeltaTime * Uni->AngleSpeed / 9 * Ani->Mdx));
 
   Uni->Pos =
     PointTransform(Uni->Pos,
-      MatrRotateY(Ani->GlobalDeltaTime * Uni->AngleSpeed * Ani->JX));
+      MatrRotateY(Ani->DeltaTime * Uni->AngleSpeed * Ani->JX));
 
-  Uni->CamRight = VecMulMatr(Uni->CamRight, MatrRotateY(Ani->GlobalDeltaTime * Uni->AngleSpeed * Ani->JX));
-  Uni->CamDir = VecMulMatr(Uni->CamDir, MatrRotateY(Ani->GlobalDeltaTime * Uni->AngleSpeed * Ani->JX));
+  Uni->CamRight = VecMulMatr(Uni->CamRight, MatrRotateY(Ani->DeltaTime * Uni->AngleSpeed * Ani->JX));
+  Uni->CamDir = VecMulMatr(Uni->CamDir, MatrRotateY(Ani->DeltaTime * Uni->AngleSpeed * Ani->JX));
 
   Uni->Pos =
     PointTransform(Uni->Pos,
-    MatrRotate(Ani->GlobalDeltaTime * Uni->AngleSpeed * Ani->JY, Uni->CamRight));
+    MatrRotate(Ani->DeltaTime * Uni->AngleSpeed * Ani->JY, Uni->CamRight));
 
   Uni->Pos =
     VecAddVec(Uni->Pos,
-    VecMulNum(Uni->CamDir, -Ani->GlobalDeltaTime * Uni->Speed * Ani->JZ));
+    VecMulNum(Uni->CamDir, -Ani->DeltaTime * Uni->Speed * Ani->JZ));
 } /* End of 'BZ6_UnitResponse' function */
 
 /* Unit plane render function.
@@ -92,11 +93,12 @@ static VOID BZ6_UnitResponse( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
  * RETURNS: None.
  */
 static VOID BZ6_UnitRender( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
-{
-  static CHAR Buf[100];
+{ 
+  static CHAR Buf[10];
 
+  sprintf(Buf, "FPS: %.3f", Ani->FPS);
+  SetWindowText(Ani->hWnd, Buf);
   BZ6_RndCamSet(Uni->Pos, Uni->At, VecSet(0, 1, 0));
-  TextOut(Ani->hDC, 0, 0, Buf, sprintf(Buf, "FPS: %.3f", Ani->FPS));
 } /* End of 'BZ6_UnitRender' function */
 
 /* Unit plane deinitialization function.

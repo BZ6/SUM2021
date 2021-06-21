@@ -28,7 +28,6 @@ struct tagbz6UNIT
 struct tagbz6ANIM
 {
   HWND hWnd;                     /* Window */
-  HDC hDC;                       /* Handle descriptor */ 
   INT W, H;                      /* Window size */
 
 
@@ -93,7 +92,7 @@ VOID BZ6_AnimResize( INT W, INT H );
  * RETURNS:
  *   NONE.
  */
-VOID BZ6_AnimCopyFrame( HDC hDC );
+VOID BZ6_AnimCopyFrame( VOID );
 
 /* Animation render function.
  * ARGUMENTS:

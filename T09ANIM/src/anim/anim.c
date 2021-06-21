@@ -19,7 +19,6 @@ VOID BZ6_AnimInit( HWND hWnd )
 {
   BZ6_Anim.hWnd = hWnd;
   BZ6_RndInit(hWnd);
-  BZ6_Anim.hDC = BZ6_hRndDCFrame;
   BZ6_TimerInit();
   BZ6_AnimInputInit();
 } /* End of 'BZ6_AnimInit' function */
@@ -65,9 +64,9 @@ VOID BZ6_AnimResize( INT W, INT H )
  * RETURNS:
  *   NONE.
  */
-VOID BZ6_AnimCopyFrame( HDC hDC )
+VOID BZ6_AnimCopyFrame( VOID )
 {
-  BZ6_RndCopyFrame(hDC);
+  BZ6_RndCopyFrame();
 } /* End of 'BZ6_AnimCopyFrame' function */
 
 /* Animation render function.
