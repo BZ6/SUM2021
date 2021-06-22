@@ -36,6 +36,16 @@ typedef struct tagVEC
   FLT X, Y, Z;
 } VEC;
 
+typedef struct tagVEC2
+{
+  FLT X, Y;
+} VEC2;
+
+typedef struct tagVEC4
+{
+  FLT X, Y, Z, W;
+} VEC4;
+
 /* Matrix type */
 typedef struct tagMATR
 {
@@ -78,6 +88,24 @@ __inline VEC VecSet( FLT X, FLT Y, FLT Z )
   v.Z = Z;
   return v;
 } /* End of 'VecSet' function */
+
+/* Vector 4D initialization function.
+ * ARGUMENTS:
+ *   - coordinates to vector:
+ *       FLT X, Y, Z, W;
+ * RETURNS:
+ *   (VEC) result vector.
+ */
+__inline VEC4 Vec4Set( FLT X, FLT Y, FLT Z, FLT W )
+{
+  VEC4 v;
+
+  v.X = X;
+  v.Y = Y;
+  v.Z = Z;
+  v.W = W;
+  return v;
+} /* End of 'Vec4Set' function */
 
 /* Add two vectors function.
  * ARGUMENTS:

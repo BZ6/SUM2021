@@ -81,6 +81,7 @@ VOID BZ6_RndInit( HWND hWnd )
   /* Set default OpenGL parameters */
   glEnable(GL_DEPTH_TEST);
   wglSwapIntervalEXT(0);
+  glClearColor(0.30, 0.47, 0.8, 1);
 
   BZ6_hRndWnd = hWnd;
 

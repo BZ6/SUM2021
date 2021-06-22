@@ -24,7 +24,7 @@ typedef struct
 static VOID BZ6_UnitInit( bz6UNIT_PLANE *Uni, bz6ANIM *Ani )
 {
   Uni->Pos = VecSet1(0);
-  BZ6_RndPrimCreateBase(&Uni->Pr, Uni->Pos, VecSet(1, 0, 0), VecSet(0, 0, 1), 3, 2, 10, 15);
+  BZ6_RndPrimCreateBase(&Uni->Pr, Uni->Pos, VecSet(1, 0, 0), VecSet(0, 0, 1), 6, 4, 20, 30);
 } /* End of 'BZ6_UnitInit' function */
 
 /* Unit plane render function.

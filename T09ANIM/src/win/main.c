@@ -68,8 +68,6 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   UpdateWindow(hWnd);
 
   BZ6_AnimAddUnit(BZ6_UnitCreatePlane());
-  BZ6_AnimAddUnit(BZ6_UnitCreateBall());
-  BZ6_AnimAddUnit(BZ6_UnitCreateBounceBall());
   BZ6_AnimAddUnit(BZ6_UnitCreateCow());
   BZ6_AnimAddUnit(BZ6_UnitCreateCowSecond());
   BZ6_AnimAddUnit(BZ6_UnitCreateCtrl());
@@ -143,6 +141,10 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
       BZ6_AnimFlipFullScreen();
     else if (wParam == 27)
       BZ6_AnimExit();
+    else if (wParam == 'Q')
+      BZ6_AnimAddUnit(BZ6_UnitCreateCow());
+    else if (wParam == 'E')
+      BZ6_AnimAddUnit(BZ6_UnitCreateCowSecond());
     return 0;
 
   case WM_MOUSEWHEEL:

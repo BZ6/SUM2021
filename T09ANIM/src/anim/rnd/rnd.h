@@ -36,17 +36,20 @@ extern MATR
 /* Vertex type */
 typedef struct tagbz6VERTEX
 {
-  VEC P;  /* Vertex position */
+  VEC P;   /* position */
+  VEC2 T;  /* texture */
+  VEC N;   /* normal */
+  VEC4 C;  /* color */
 } bz6VERTEX;
 
 /* Primitive type */
 typedef struct tagbz6PRIM
 {
-  bz6VERTEX *V; /* Vertex attributes array */
-  INT NumOfV;   /* Number of vertices */
-
-  INT *I;       /* Index array (for trimesh – by 3 ones) */
-  INT NumOfI;   /* Number of indices */
+  INT
+    VA,   /* Vertex arrray */
+    VBuf, /* Vertex buffer */
+    IBuf; /* Indexes buffer */
+  INT NumOfElements;   /* Number of elements */
 
   MATR Trans;   /* Additional transformation matrix */
 } bz6PRIM;
@@ -123,16 +126,21 @@ VOID BZ6_RndEnd( VOID );
 
 /* Forward declaration primitive functiones */
 
-/* Rendering create primitive function.
+/* Primitive creation function.
  * ARGUMENTS:
- *   - primitive:
+ *   - primitive pointer:
  *       bz6PRIM *Pr;
- *   - numbers of vertexes and indexes:
- *       INT NoofV, NoofI
- * RETURNS:
- *   (BOOL) TRUE if complete, FALSE if not complete.
+ *   - vertex attributes array:
+ *       bz6VERTEX *V;
+ *   - number of vertices:
+ *       INT NumOfV;
+ *   - index array (for trimesh – by 3 ones, may be NULL)
+ *       INT *I;
+ *   - number of indices
+ *       INT NumOfI;
+ * RETURNS: None.
  */
-BOOL BZ6_RndPrimCreate( bz6PRIM *Pr, INT NoofV, INT NoofI );
+VOID BZ6_RndPrimCreate( bz6PRIM *Pr, bz6VERTEX *V, INT NumOfV, INT *I, INT NumOfI );
 
 /* Rendering free primitive function.
  * ARGUMENTS:
@@ -175,10 +183,12 @@ VOID BZ6_RndPrimCreateSphere( bz6PRIM *Pr, VEC C, DBL R, INT SplitW, INT SplitH 
  *       bz6PRIM *Pr;
  *   - size:
  *       INT GridW, GridH;
+ *   - vertexes:
+ *       bz6VERTEX *V
  * RETURNS:
  *   NONE.
  */
-VOID BZ6_RndPrimCreateGrid( bz6PRIM *Pr, INT GridW, INT GridH );
+VOID BZ6_RndPrimCreateGrid( bz6PRIM *Pr, INT GridW, INT GridH, bz6VERTEX *V );
 
 /* Rendering draw torus function.
  * ARGUMENTS:

@@ -49,30 +49,32 @@ static VOID BZ6_UnitResponse( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
 
   Uni->Pos =
     VecAddVec(Uni->Pos,
-      VecMulNum(Uni->CamDir, Ani->DeltaTime * Uni->Speed / 10 * Ani->Mdz));
+    VecMulNum(Uni->CamDir, Ani->GlobalDeltaTime * Uni->Speed / 10 * Ani->Mdz));
 
   Uni->Pos =
     PointTransform(Uni->Pos,
       MatrRotateY(Ani->Keys[VK_LBUTTON] *
-      Ani->DeltaTime * Uni->AngleSpeed * Ani->Mdx));
+      Ani->GlobalDeltaTime * Uni->AngleSpeed * Ani->Mdx));
   
   Uni->CamRight = VecMulMatr(Uni->CamRight, MatrRotateY(Ani->Keys[VK_LBUTTON] *
-      Ani->DeltaTime * Uni->AngleSpeed * Ani->Mdx));
+      Ani->GlobalDeltaTime * Uni->AngleSpeed * Ani->Mdx));
   Uni->CamDir = VecMulMatr(Uni->CamDir, MatrRotateY(Ani->Keys[VK_LBUTTON] *
-      Ani->DeltaTime * Uni->AngleSpeed * Ani->Mdx));
+      Ani->GlobalDeltaTime * Uni->AngleSpeed * Ani->Mdx));
 
-  Uni->CamRight = VectorTransform(Uni->CamRight, MatrRotate(-Ani->DeltaTime * Uni->AngleSpeed * Ani->JX, VecCrossVec(Uni->CamRight, Uni->CamDir)));
-  Uni->CamDir = VectorTransform(Uni->CamDir, MatrRotate(-Ani->DeltaTime * Uni->AngleSpeed * Ani->JX, VecCrossVec(Uni->CamRight, Uni->CamDir)));
-
-  Uni->CamDir = VectorTransform(Uni->CamDir, MatrRotate(-Ani->DeltaTime * Uni->AngleSpeed * Ani->JY, Uni->CamRight));
-
-  Uni->Pos =
-    VecAddVec(Uni->Pos,
-    VecMulNum(Uni->CamRight, Ani->DeltaTime * Uni->Speed * Ani->JR));
+  /* Joystick */
+  Uni->CamDir = VectorTransform(Uni->CamDir, MatrRotate(-Ani->GlobalDeltaTime * Uni->AngleSpeed * Ani->JY, Uni->CamRight));
+  
+  Uni->CamRight = VectorTransform(Uni->CamRight, MatrRotate(-Ani->GlobalDeltaTime * Uni->AngleSpeed * Ani->JX, VecSet(0, 1, 0)));
+  
+  Uni->CamDir = VectorTransform(Uni->CamDir, MatrRotate(-Ani->GlobalDeltaTime * Uni->AngleSpeed * Ani->JX, VecSet(0, 1, 0)));
 
   Uni->Pos =
     VecAddVec(Uni->Pos,
-    VecMulNum(Uni->CamDir, -Ani->DeltaTime * Uni->Speed * Ani->JZ));
+    VecMulNum(Uni->CamRight, Ani->GlobalDeltaTime * Uni->Speed * Ani->JR));
+
+  Uni->Pos =
+    VecAddVec(Uni->Pos,
+    VecMulNum(Uni->CamDir, -Ani->GlobalDeltaTime * Uni->Speed * Ani->JZ)); 
 } /* End of 'BZ6_UnitResponse' function */
 
 /* Unit plane render function.
