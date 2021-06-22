@@ -44,6 +44,13 @@ bz6UNIT * BZ6_UnitCreateCtrl( VOID );
  */
 bz6UNIT * BZ6_UnitCreateCow( VOID );
 
+/* Unit second cow creation function.
+ * ARGUMENTS: None.
+ * RETURNS:
+ *   (bz6UNIT *) pointer to created unit.
+ */
+bz6UNIT * BZ6_UnitCreateCowSecond( VOID );
+
 #endif /* __units_h_ */
 
 /* END OF 'units.h' FILE */

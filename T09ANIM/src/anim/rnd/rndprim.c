@@ -68,10 +68,12 @@ VOID BZ6_RndPrimDraw( bz6PRIM *Pr, MATR World )
   glLoadMatrixf(wvp.A[0]);
 
   /* Draw triangles */
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   glBegin(GL_TRIANGLES);
   for (i = 0; i < Pr->NumOfI; i++)
+  {
+    glColor3b(i * 3 % 250 + 5, i * 2 % 250 + 5, i % 250 + 5);
     glVertex3fv(&Pr->V[Pr->I[i]].P.X);
+  }
   glEnd();
 } /* End of 'BZ6_RndPrimDraw' function */
 

@@ -71,6 +71,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   BZ6_AnimAddUnit(BZ6_UnitCreateBall());
   BZ6_AnimAddUnit(BZ6_UnitCreateBounceBall());
   BZ6_AnimAddUnit(BZ6_UnitCreateCow());
+  BZ6_AnimAddUnit(BZ6_UnitCreateCowSecond());
   BZ6_AnimAddUnit(BZ6_UnitCreateCtrl());
 
   /* Message loop */

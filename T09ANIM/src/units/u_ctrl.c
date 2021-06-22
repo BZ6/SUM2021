@@ -49,11 +49,6 @@ static VOID BZ6_UnitResponse( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
 
   Uni->Pos =
     VecAddVec(Uni->Pos,
-      VecMulNum(Uni->CamDir, Ani->DeltaTime * Uni->Speed *
-        (Ani->Keys[VK_UP] - Ani->Keys[VK_DOWN])));
-
-  Uni->Pos =
-    VecAddVec(Uni->Pos,
       VecMulNum(Uni->CamDir, Ani->DeltaTime * Uni->Speed / 10 * Ani->Mdz));
 
   Uni->Pos =
@@ -66,16 +61,14 @@ static VOID BZ6_UnitResponse( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
   Uni->CamDir = VecMulMatr(Uni->CamDir, MatrRotateY(Ani->Keys[VK_LBUTTON] *
       Ani->DeltaTime * Uni->AngleSpeed * Ani->Mdx));
 
-  Uni->CamRight = VectorTransform(Uni->CamRight, MatrRotate(-Ani->DeltaTime * Uni->AngleSpeed * Ani->JR, VecCrossVec(Uni->CamRight, Uni->CamDir)));
-  Uni->CamDir = VectorTransform(Uni->CamDir, MatrRotate(-Ani->DeltaTime * Uni->AngleSpeed * Ani->JR, VecCrossVec(Uni->CamRight, Uni->CamDir)));
+  Uni->CamRight = VectorTransform(Uni->CamRight, MatrRotate(-Ani->DeltaTime * Uni->AngleSpeed * Ani->JX, VecCrossVec(Uni->CamRight, Uni->CamDir)));
+  Uni->CamDir = VectorTransform(Uni->CamDir, MatrRotate(-Ani->DeltaTime * Uni->AngleSpeed * Ani->JX, VecCrossVec(Uni->CamRight, Uni->CamDir)));
+
+  Uni->CamDir = VectorTransform(Uni->CamDir, MatrRotate(-Ani->DeltaTime * Uni->AngleSpeed * Ani->JY, Uni->CamRight));
 
   Uni->Pos =
     VecAddVec(Uni->Pos,
-    VecMulNum(VecCrossVec(Uni->CamRight, Uni->CamDir), -Ani->DeltaTime * Uni->Speed / 10 * Ani->JY));
-
-  Uni->Pos =
-    VecAddVec(Uni->Pos,
-    VecMulNum(Uni->CamRight, Ani->DeltaTime * Uni->Speed * Ani->JX));
+    VecMulNum(Uni->CamRight, Ani->DeltaTime * Uni->Speed * Ani->JR));
 
   Uni->Pos =
     VecAddVec(Uni->Pos,
