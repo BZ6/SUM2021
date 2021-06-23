@@ -67,10 +67,11 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   ShowWindow(hWnd, CmdShow);
   UpdateWindow(hWnd);
 
+  BZ6_AnimAddUnit(BZ6_UnitCreateCtrl());
+  BZ6_AnimAddUnit(BZ6_UnitCreateTorus());
   BZ6_AnimAddUnit(BZ6_UnitCreatePlane());
   BZ6_AnimAddUnit(BZ6_UnitCreateCow());
   BZ6_AnimAddUnit(BZ6_UnitCreateCowSecond());
-  BZ6_AnimAddUnit(BZ6_UnitCreateCtrl());
 
   /* Message loop */
   while (TRUE)
@@ -145,6 +146,8 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
       BZ6_AnimAddUnit(BZ6_UnitCreateCow());
     else if (wParam == 'E')
       BZ6_AnimAddUnit(BZ6_UnitCreateCowSecond());
+    else if (wParam == 'X')
+      BZ6_AnimDelUnit();
     return 0;
 
   case WM_MOUSEWHEEL:

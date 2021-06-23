@@ -4,7 +4,7 @@
  * PURPOSE: 3D animation rendering base module.
  */
 
-#include "rnd.h"
+#include "../anim.h"
 
 /* Rendering initialization function.
  * ARGUMENTS:
@@ -83,6 +83,10 @@ VOID BZ6_RndInit( HWND hWnd )
   wglSwapIntervalEXT(0);
   glClearColor(0.30, 0.47, 0.8, 1);
 
+  BZ6_RndShadersInit();
+
+  /*BZ6_RndShaderAdd("DEFAULT");  */
+
   BZ6_hRndWnd = hWnd;
 
   BZ6_RndFrameW = BZ6_RndFrameH = 100;
@@ -92,7 +96,7 @@ VOID BZ6_RndInit( HWND hWnd )
   BZ6_RndCamSet(VecSet(2, 3, 5), VecSet1(0), VecSet(0, 1, 0));
 } /* End of 'BZ6_RndInit' function */
 
-/* Rendering close function.
+/* Renderin   g close function.
  * ARGUMENTS:
  *   NONE;
  * RETURNS:
@@ -100,6 +104,7 @@ VOID BZ6_RndInit( HWND hWnd )
  */
 VOID BZ6_RndClose( VOID )
 {
+  BZ6_RndShadersClose();
   wglMakeCurrent(NULL, NULL);
   wglDeleteContext(BZ6_hRndGLRC);
   ReleaseDC(BZ6_hRndWnd, BZ6_hRndDC);
@@ -181,6 +186,15 @@ VOID BZ6_RndCamSet( VEC Loc, VEC At, VEC Up )
  */
 VOID BZ6_RndStart( VOID )
 { 
+  static DBL dt;
+
+  dt += BZ6_Anim.GlobalDeltaTime;
+  if (dt > 2)
+  {
+    dt = 0;
+    BZ6_RndShadersUpdate();
+  }
+
   /* Clear frame */
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 } /* End of 'BZ6_RndStart' function */

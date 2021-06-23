@@ -7,7 +7,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
-#include "rnd.h"
+#include "../anim.h"
 
 /* Primitive creation function.
  * ARGUMENTS:
@@ -94,6 +94,15 @@ VOID BZ6_RndPrimFree( bz6PRIM *Pr )
 VOID BZ6_RndPrimDraw( bz6PRIM *Pr, MATR World )
 {
   MATR wvp = MatrMulMatr3(Pr->Trans, World, BZ6_RndMatrVP);
+  INT ProgId = BZ6_RndShaders[0].ProgId;
+  INT loc;
+
+  glUseProgram(ProgId);
+
+  if ((loc = glGetUniformLocation(ProgId, "MatrWVP")) != -1)
+    glUniformMatrix4fv(loc, 1, FALSE, wvp.A[0]);
+  if ((loc = glGetUniformLocation(ProgId, "Time")) != -1)
+    glUniform1f(loc, BZ6_Anim.Time);
 
   /* Send matrix to OpenGL /v.1.0 */
   glLoadMatrixf(wvp.A[0]);
@@ -103,6 +112,8 @@ VOID BZ6_RndPrimDraw( bz6PRIM *Pr, MATR World )
   glDrawElements(GL_TRIANGLES, Pr->NumOfElements, GL_UNSIGNED_INT, NULL);
   glBindVertexArray(0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  glUseProgram(0);
+
 } /* End of 'BZ6_RndPrimDraw' function */
 
 /* Rendering draw sphere function.

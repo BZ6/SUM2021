@@ -29,6 +29,8 @@ static VOID BZ6_UnitInit( bz6UNIT_COW *Uni, bz6ANIM *Ani )
   Uni->Pos = VecSet1(0);
   Uni->Dir = VecSet(1, 0 ,0);
   Uni->Cow = MatrMulMatr(MatrScale(VecSet1(0.1)), MatrTranslate(VecSet(-0.6, -0.5, 0)));
+  BZ6_RndShadersClose();
+  BZ6_RndShaderAdd("COW");
 } /* End of 'BZ6_UnitInit' function */
 
 /* Unit cow inter frame events handle function.

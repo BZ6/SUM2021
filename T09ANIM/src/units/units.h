@@ -51,6 +51,13 @@ bz6UNIT * BZ6_UnitCreateCow( VOID );
  */
 bz6UNIT * BZ6_UnitCreateCowSecond( VOID );
 
+/* Unit torus creation function.
+ * ARGUMENTS: None.
+ * RETURNS:
+ *   (bz6UNIT *) pointer to created unit.
+ */
+bz6UNIT * BZ6_UnitCreateTorus( VOID );
+
 #endif /* __units_h_ */
 
 /* END OF 'units.h' FILE */

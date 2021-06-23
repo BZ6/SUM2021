@@ -43,6 +43,20 @@ VOID BZ6_AnimClose( VOID )
   BZ6_RndClose();
 } /* End of 'BZ6_AnimClose' function */
 
+/* Animation unit delete function.
+ * ARGUMENTS:
+ *   NONE.
+ * RETURNS:
+ *   NONE.
+ */
+VOID BZ6_AnimDelUnit( VOID )
+{
+  BZ6_Anim.NumOfUnits--;
+  BZ6_Anim.Units[BZ6_Anim.NumOfUnits]->Close(BZ6_Anim.Units[BZ6_Anim.NumOfUnits], &BZ6_Anim);
+  free(BZ6_Anim.Units[BZ6_Anim.NumOfUnits]);
+  BZ6_Anim.Units[BZ6_Anim.NumOfUnits] = NULL;
+} /* End of 'BZ6_AnimDelUnit' function */
+
 /* Animation resize function.
  * ARGUMENTS:
  *   - window size:

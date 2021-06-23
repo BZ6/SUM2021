@@ -164,6 +164,14 @@ VOID BZ6_AnimInputInit( VOID );
  */
 VOID BZ6_AnimInputResponse( VOID );
 
+/* Animation unit delete function.
+ * ARGUMENTS:
+ *   NONE.
+ * RETURNS:
+ *   NONE.
+ */
+VOID BZ6_AnimDelUnit( VOID );
+
 #endif /* __anim_h_ */
 
 /* END OF 'anim.h' FILE */
