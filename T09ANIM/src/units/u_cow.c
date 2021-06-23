@@ -43,9 +43,14 @@ static VOID BZ6_UnitInit( bz6UNIT_COW *Uni, bz6ANIM *Ani )
  */
 static VOID BZ6_UnitResponse( bz6UNIT_COW *Uni, bz6ANIM *Ani )
 {
+  VEC ve;
+
   Uni->Cow = MatrMulMatr(Uni->Cow, MatrRotate(Ani->DeltaTime * 400 * (Ani->Keys['A']- Ani->Keys['D']), VecSet(0, 1, 0)));
   Uni->Dir = VectorTransform(Uni->Dir, MatrRotate(Ani->DeltaTime * 400 * (Ani->Keys['A']- Ani->Keys['D']), VecSet(0, 1, 0)));
-  Uni->Pos = VecAddVec(Uni->Pos, VecMulNum(Uni->Dir, Ani->DeltaTime * 50 * (Ani->Keys['W']- Ani->Keys['S'])));
+  ve = VecAddVec(Uni->Pos, VecMulNum(Uni->Dir, Ani->DeltaTime * 50 * (Ani->Keys['W']- Ani->Keys['S'])));
+  if (ve.X < 52 && ve.X > -58 && ve.Z < 54 && ve.Z > -58)
+    Uni->Pos = ve;
+
 } /* End of 'BZ6_UnitResponse' function */
 
 /* Unit cow render function.

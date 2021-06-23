@@ -70,6 +70,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   BZ6_AnimAddUnit(BZ6_UnitCreateCtrl());
   BZ6_AnimAddUnit(BZ6_UnitCreateTorus());
   BZ6_AnimAddUnit(BZ6_UnitCreatePlane());
+  BZ6_AnimAddUnit(BZ6_UnitCreateFence());
   BZ6_AnimAddUnit(BZ6_UnitCreateCow());
   BZ6_AnimAddUnit(BZ6_UnitCreateCowSecond());
 

@@ -213,7 +213,7 @@ INT BZ6_RndShadersSize;
 VOID BZ6_RndShadersInit( VOID )
 {
   BZ6_RndShadersSize = 0;
-  BZ6_RndShaderAdd("DEFAULT");
+  BZ6_RndShaderAdd("COW");
 } /* End of 'BZ6_RndShadersInit' function */
 
 /* Shader stock deinitialization function.
