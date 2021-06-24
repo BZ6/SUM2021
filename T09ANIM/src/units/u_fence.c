@@ -24,7 +24,7 @@ typedef struct
 static VOID BZ6_UnitInit( bz6UNIT_FENCE *Uni, bz6ANIM *Ani )
 {
   Uni->Pos = VecSet1(0);
-  BZ6_RndPrimCreateBase(&Uni->Pr, Uni->Pos, VecSet(0, 1, 0), VecSet(0, 0, 1), 1, 4, 5, 30);
+  BZ6_RndPrimCreateBase(&Uni->Pr, Uni->Pos, VecSet(0, 1, 0), VecSet(0, 0, 1), 1, 1, 5, 100);
 } /* End of 'BZ6_UnitInit' function */
 
 /* Unit fence render function.
@@ -37,10 +37,10 @@ static VOID BZ6_UnitInit( bz6UNIT_FENCE *Uni, bz6ANIM *Ani )
  */
 static VOID BZ6_UnitRender( bz6UNIT_FENCE *Uni, bz6ANIM *Ani )
 {
-  BZ6_RndPrimDraw(&Uni->Pr, MatrTranslate(VecSet(53, 2, 0)));
-  BZ6_RndPrimDraw(&Uni->Pr, MatrTranslate(VecSet(-59, 2, 0)));
-  BZ6_RndPrimDraw(&Uni->Pr, MatrMulMatr3(MatrRotateY(90), MatrScale(VecSet(2, 1, 1)), MatrTranslate(VecSet(-26.5, 2, 55))));
-  BZ6_RndPrimDraw(&Uni->Pr, MatrMulMatr(MatrRotateY(90), MatrTranslate(VecSet(29.5, 2, -59))));
+  BZ6_RndPrimDraw(&Uni->Pr, MatrTranslate(VecSet(49, 2.5, 0)));
+  BZ6_RndPrimDraw(&Uni->Pr, MatrTranslate(VecSet(-50, 2.5, 0)));
+  BZ6_RndPrimDraw(&Uni->Pr, MatrMulMatr(MatrRotateY(90), MatrTranslate(VecSet(0, 2.5, 49))));
+  BZ6_RndPrimDraw(&Uni->Pr, MatrMulMatr(MatrRotateY(90), MatrTranslate(VecSet(0, 2.5, -50))));
 } /* End of 'BZ6_UnitRender' function */
 
 /* Unit fence deinitialization function.

@@ -240,7 +240,15 @@
 						Name="Resourses"
 						>
 						<File
-							RelativePath=".\src\anim\rnd\res\shaders.c"
+							RelativePath=".\src\anim\rnd\res\rndres.h"
+							>
+						</File>
+						<File
+							RelativePath=".\src\anim\rnd\res\rndshd.c"
+							>
+						</File>
+						<File
+							RelativePath=".\src\anim\rnd\res\rndtxt.c"
 							>
 						</File>
 					</Filter>

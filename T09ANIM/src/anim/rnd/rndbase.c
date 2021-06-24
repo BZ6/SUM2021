@@ -85,7 +85,7 @@ VOID BZ6_RndInit( HWND hWnd )
 
   BZ6_RndShadersInit();
 
-  /*BZ6_RndShaderAdd("DEFAULT");  */
+  BZ6_RndShaderAdd("COW");
 
   BZ6_hRndWnd = hWnd;
 

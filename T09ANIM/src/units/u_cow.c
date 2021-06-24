@@ -28,9 +28,8 @@ static VOID BZ6_UnitInit( bz6UNIT_COW *Uni, bz6ANIM *Ani )
   BZ6_RndPrimLoad(&Uni->Pr, "BIN/MODELS/cow.obj");
   Uni->Pos = VecSet1(0);
   Uni->Dir = VecSet(1, 0 ,0);
-  Uni->Cow = MatrMulMatr(MatrScale(VecSet1(0.1)), MatrTranslate(VecSet(-0.6, -0.5, 0)));
+  Uni->Cow = MatrMulMatr(MatrScale(VecSet1(0.1)), MatrTranslate(VecSet(0, 0, 0)));
   BZ6_RndShadersClose();
-  BZ6_RndShaderAdd("COW");
 } /* End of 'BZ6_UnitInit' function */
 
 /* Unit cow inter frame events handle function.
@@ -48,7 +47,7 @@ static VOID BZ6_UnitResponse( bz6UNIT_COW *Uni, bz6ANIM *Ani )
   Uni->Cow = MatrMulMatr(Uni->Cow, MatrRotate(Ani->DeltaTime * 400 * (Ani->Keys['A']- Ani->Keys['D']), VecSet(0, 1, 0)));
   Uni->Dir = VectorTransform(Uni->Dir, MatrRotate(Ani->DeltaTime * 400 * (Ani->Keys['A']- Ani->Keys['D']), VecSet(0, 1, 0)));
   ve = VecAddVec(Uni->Pos, VecMulNum(Uni->Dir, Ani->DeltaTime * 50 * (Ani->Keys['W']- Ani->Keys['S'])));
-  if (ve.X < 52 && ve.X > -58 && ve.Z < 54 && ve.Z > -58)
+  if (ve.X < 47.5 && ve.X > -48.5 && ve.Z < 47.5 && ve.Z > -48.5)
     Uni->Pos = ve;
 
 } /* End of 'BZ6_UnitResponse' function */

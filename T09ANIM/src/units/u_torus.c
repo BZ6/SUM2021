@@ -22,9 +22,9 @@ typedef struct
  * RETURNS: None.
  */
 static VOID BZ6_UnitInit( bz6UNIT_TORUS *Uni, bz6ANIM *Ani )
-{
+{ 
+  Uni->Pos = VecSet(0, 0, 0);
   BZ6_RndPrimCreateTorus(&Uni->Pr, Uni->Pos, 1, 3, 30, 20);
-  Uni->Pos = VecSet(0, -0.5, 0);
 } /* End of 'BZ6_UnitInit' function */
 
 /* Unit torus inter frame events handle function.

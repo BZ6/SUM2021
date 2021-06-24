@@ -103,6 +103,8 @@ VOID BZ6_RndPrimDraw( bz6PRIM *Pr, MATR World )
     glUniformMatrix4fv(loc, 1, FALSE, wvp.A[0]);
   if ((loc = glGetUniformLocation(ProgId, "Time")) != -1)
     glUniform1f(loc, BZ6_Anim.Time);
+  if ((loc = glGetUniformLocation(ProgId, "Tex")) != -1)
+    glUniform1i(loc, 1);
 
   /* Send matrix to OpenGL /v.1.0 */
   glLoadMatrixf(wvp.A[0]);
@@ -222,23 +224,16 @@ VOID BZ6_RndPrimCreateGrid( bz6PRIM *Pr, INT GridW, INT GridH, bz6VERTEX *V )
   {
     VEC
       p0 = V[Ind[i]].P,
-      p2 = V[Ind[i + 1]].P,
-      p1 = V[Ind[i + 2]].P,
+      p1 = V[Ind[i + 1]].P,
+      p2 = V[Ind[i + 2]].P,
       N = VecNormalize(VecCrossVec(VecSubVec(p1, p0), VecSubVec(p2, p0)));
 
       V[Ind[i]].N = VecAddVec(V[Ind[i]].N, N);
       V[Ind[i + 1]].N = VecAddVec(V[Ind[i + 1]].N, N);
       V[Ind[i + 2]].N = VecAddVec(V[Ind[i + 2]].N, N);
-  }
-
-  for (i = 0; i < GridH * GridW; i++)
-  {
-    VEC L = {1, 1, 1};
-    FLT nl = VecDotVec(VecNormalize(V[i].N), L);
-    
-    if (nl < 0.1)
-      nl = 0.1;
-    V[i].C = Vec4Set(0.3 * nl, 0.995 * nl, 0.991 * nl, 1);
+      V[Ind[i]].C = Vec4Set(0.5, 0.7, 0.2, 0);
+      V[Ind[i + 1]].C = Vec4Set(0.5, 0.7, 0.2, 0);
+      V[Ind[i + 2]].C = Vec4Set(0.5, 0.7, 0.2, 0);
   }
 
   BZ6_RndPrimCreate(Pr, V, GridW * GridH, Ind, (GridH - 1) * (GridW - 1) * 6);
@@ -333,6 +328,7 @@ BOOL BZ6_RndPrimLoad( bz6PRIM *Pr, CHAR *FileName )
 
       sscanf(Buf + 2, "%lf%lf%lf", &x, &y, &z);
       V[nv].N = VecSet(0, 0, 0);
+      V[nv].C = Vec4Set(0.9, 0.6, 0.4, 1);
       V[nv++].P = VecSet(x, y, z);
     }
     else if (Buf[0] == 'f' && Buf[1] == ' ')
@@ -376,16 +372,6 @@ BOOL BZ6_RndPrimLoad( bz6PRIM *Pr, CHAR *FileName )
       V[Ind[i]].N = VecAddVec(V[Ind[i]].N, N);
       V[Ind[i + 1]].N = VecAddVec(V[Ind[i + 1]].N, N);
       V[Ind[i + 2]].N = VecAddVec(V[Ind[i + 2]].N, N);
-  }
-
-  for (i = 0; i < nv; i++)
-  {
-    VEC L = {1, 1, 1};
-    FLT nl = VecDotVec(VecNormalize(V[i].N), L);
-    
-    if (nl < 0.1)
-      nl = 0.1;
-    V[i].C = Vec4Set(0.3 * nl, 0.2 * nl, 0.1 * nl, 1);
   }
   BZ6_RndPrimCreate(Pr, V, nv, Ind, nind);
   free(V);

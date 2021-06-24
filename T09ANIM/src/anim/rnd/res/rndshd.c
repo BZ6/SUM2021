@@ -1,5 +1,5 @@
 /* FILE NAME: rndshd.c
- * PROGRAMMER: VG4
+ * PROGRAMMER: BZ6
  * DATE: 23.06.2021
  * PURPOSE: 3D animation rendering shader handle functions module.
  */
@@ -7,11 +7,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "../rnd.h"
+#include "rndres.h"
 
-/***
- * Base shaders functions
- ***/
+/* Shader stock array and it size */
+bz6SHADER BZ6_RndShaders[BZ6_MAX_SHADERS];
+INT BZ6_RndShadersSize;
 
 /* Save log to file function.
  * ARGUMENTS:
@@ -264,5 +264,17 @@ VOID BZ6_RndShadersUpdate( VOID )
     BZ6_RndShaders[i].ProgId = BZ6_RndShdLoad(BZ6_RndShaders[i].Name);
   }
 } /* End of 'BZ6_RndShadersUpdate' function */
+
+/* Shader stock delete function.
+ * ARGUMENTS: 
+ *   - program Id:
+ *       INT ProgId.
+ * RETURNS: None.
+ */
+VOID BZ6_RndShdDelete( INT ProgId )
+{
+  BZ6_RndShdFree(ProgId);
+  BZ6_RndShadersSize--;
+} /* End of 'BZ6_RndShdDelete' function */
 
 /* END OF 'rndshd.c' FILE */
