@@ -55,6 +55,7 @@ struct tagbz6ANIM
   INT Mx, My, Mz, Mdx, Mdy, Mdz; /* Mouse data */
 
   INT Count;
+  INT RandomNumber;
 };
 
 extern bz6ANIM BZ6_Anim;

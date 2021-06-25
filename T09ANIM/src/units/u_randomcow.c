@@ -1,8 +1,10 @@
-/* FILE NAME: u_cowsecond.c
+/* FILE NAME: u_randomcow.c
  * PROGRAMMER: BZ6
  * DATE: 21.06.2021
  * PURPOSE: 3D animation second cow unit module.
  */
+
+#include <stdlib.h>
 
 #include "units.h"
 
@@ -51,25 +53,11 @@ static VOID BZ6_UnitResponse( bz6UNIT_COW_RANDOM *Uni, bz6ANIM *Ani )
   ve = VecAddVec(Uni->Pos, VecMulNum(Uni->Dir, Ani->DeltaTime * 50 * (Ani->Keys[VK_UP]- Ani->Keys[VK_DOWN])));
   
   if (ve.X < 47.5 && ve.X > -48.5 && ve.Z < 47.5 && ve.Z > -48.5)
-    if ((ve.X < 1.5 || ve.X > 6 || ve.Z < -2.5 || ve.Z > 2.5) && (ve.X < -6 || ve.X > -1.5 || ve.Z < -2.5 || ve.Z > 2.5) && Ani->Count == 0)
-      Uni->IsDvig = TRUE;
-    else if ((ve.X < 21.5 || ve.X > 26 || ve.Z < 7.5 || ve.Z > 12.5) && (ve.X < 14 || ve.X > 19.5 || ve.Z < 7.5 || ve.Z > 12.5) && Ani->Count == 1)
-      Uni->IsDvig = TRUE;
-    else if ((ve.X < -19.5 || ve.X > -14 || ve.Z < -12.5 || ve.Z > -7.5) && (ve.X < -26 || ve.X > -21.5 || ve.Z < -12.5 || ve.Z > -7.5) && Ani->Count == 2)
+    if ((ve.X < 1.5 + Ani->RandomNumber || ve.X > 6 + Ani->RandomNumber || ve.Z < -2.5 + Ani->RandomNumber || ve.Z > 2.5 + Ani->RandomNumber) && (ve.X < -6 + Ani->RandomNumber || ve.X > -1.5 + Ani->RandomNumber || ve.Z < -2.5 + Ani->RandomNumber || ve.Z > 2.5 + Ani->RandomNumber))
       Uni->IsDvig = TRUE;
 
-  if (Ani->Count == 0)
-    if (ve.X < 1.5 && ve.Z > -2.5 && ve.Z < 2.5 && ve.X > -1.5 && Uni->IsDvig)
-      Ani->Count = 1;
-
-  if (Ani->Count == 1)
-    if (ve.X < 21.5 && ve.Z > 7.5 && ve.Z < 12.5 && ve.X > 19.5 && Uni->IsDvig)
-      Ani->Count = 2;
-
-  if (Ani->Count == 2)
-    if (ve.X < -19.5 && ve.Z > -12.5 && ve.Z < -7.5 && ve.X > -21.5 && Uni->IsDvig)
-      Ani->Count = 0;
-
+  if (ve.X < 1.5 + Ani->RandomNumber && ve.Z > -2.5 + Ani->RandomNumber && ve.Z < 2.5 + Ani->RandomNumber && ve.X > -1.5 + Ani->RandomNumber && Uni->IsDvig)
+      Ani->RandomNumber = rand() % 80 - 40;
 
   if (Uni->IsDvig)
     Uni->Pos = ve;
@@ -109,7 +97,7 @@ static VOID BZ6_UnitClose( bz6UNIT_COW_RANDOM *Uni, bz6ANIM *Ani )
  * RETURNS:
  *   (bz6UNIT *) pointer to created unit.
  */
-bz6UNIT * BZ6_UnitCreateCowSecond( VOID )
+bz6UNIT * BZ6_UnitCreateCowRandom( VOID )
 {
   bz6UNIT *Uni;
 
@@ -125,4 +113,4 @@ bz6UNIT * BZ6_UnitCreateCowSecond( VOID )
   return Uni;
 } /* End of 'BZ6_UnitCreateCowSecond' function */
 
-/* END OF 'u_cowsecond.c' FILE */
+/* END OF 'u_randomcow.c' FILE */

@@ -294,6 +294,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\units\u_randomcow.c"
+					>
+				</File>
+				<File
 					RelativePath=".\src\units\u_tex.c"
 					>
 				</File>

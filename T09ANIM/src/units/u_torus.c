@@ -49,6 +49,10 @@ static VOID BZ6_UnitResponse( bz6UNIT_TORUS *Uni, bz6ANIM *Ani )
  */
 static VOID BZ6_UnitRender( bz6UNIT_TORUS *Uni, bz6ANIM *Ani )
 {
+  if (Ani->RandomNumber == 0)
+    Ani->RandomNumber = rand() % 80 - 40;
+  BZ6_RndPrimDraw(&Uni->Pr, MatrMulMatr3(MatrRotateX(-90), MatrRotateZ(-90), MatrTranslate(VecSet(Ani->RandomNumber, -0.5, Ani->RandomNumber))));
+  /*
   if (Ani->Count == 0)
     BZ6_RndPrimDraw(&Uni->Pr, MatrMulMatr3(MatrRotateX(-90), MatrRotateZ(-90), MatrTranslate(VecSet(0, -0.5, 0))));
 
@@ -56,8 +60,7 @@ static VOID BZ6_UnitRender( bz6UNIT_TORUS *Uni, bz6ANIM *Ani )
     BZ6_RndPrimDraw(&Uni->Pr, MatrMulMatr3(MatrRotateX(-90), MatrRotateZ(-90), MatrTranslate(VecSet(20, -0.5, 10))));
 
   if (Ani->Count == 2)
-    BZ6_RndPrimDraw(&Uni->Pr, MatrMulMatr3(MatrRotateX(-90), MatrRotateZ(-90), MatrTranslate(VecSet(-20, -0.5, -10))));
-
+    BZ6_RndPrimDraw(&Uni->Pr, MatrMulMatr3(MatrRotateX(-90), MatrRotateZ(-90), MatrTranslate(VecSet(-20, -0.5, -10))));  */
 } /* End of 'BZ6_UnitRender' function */
 
 /* Unit torus deinitialization function.

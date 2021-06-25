@@ -72,6 +72,8 @@ bz6UNIT * BZ6_UnitCreateFence( VOID );
  */
 bz6UNIT * BZ6_UnitCreateTex( VOID );
 
+bz6UNIT * BZ6_UnitCreateCowRandom( VOID );
+
 #endif /* __units_h_ */
 
 /* END OF 'units.h' FILE */

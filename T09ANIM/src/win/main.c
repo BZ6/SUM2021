@@ -72,7 +72,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   BZ6_AnimAddUnit(BZ6_UnitCreateTorus());
   BZ6_AnimAddUnit(BZ6_UnitCreateFence());
   BZ6_AnimAddUnit(BZ6_UnitCreateCow());
-  BZ6_AnimAddUnit(BZ6_UnitCreateCowSecond());
+  BZ6_AnimAddUnit(BZ6_UnitCreateCowRandom());
   //BZ6_AnimAddUnit(BZ6_UnitCreateTex());
 
   /* Message loop */
@@ -147,7 +147,7 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
     else if (wParam == 'Q')
       BZ6_AnimAddUnit(BZ6_UnitCreateCow());
     else if (wParam == 'E')
-      BZ6_AnimAddUnit(BZ6_UnitCreateCowSecond());
+      BZ6_AnimAddUnit(BZ6_UnitCreateCowRandom());
     else if (wParam == 'X')
       BZ6_AnimDelUnit();
     return 0;
