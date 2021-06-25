@@ -53,6 +53,8 @@ struct tagbz6ANIM
     KeysClick[256], /* Keyboard 1 click in frame */
     KeysOld[256];   /* Keyboard in priveous frame */
   INT Mx, My, Mz, Mdx, Mdy, Mdz; /* Mouse data */
+
+  INT Count;
 };
 
 extern bz6ANIM BZ6_Anim;

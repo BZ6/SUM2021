@@ -17,6 +17,7 @@ bz6ANIM BZ6_Anim;
  */
 VOID BZ6_AnimInit( HWND hWnd )
 {
+  BZ6_Anim.Count = 0;
   BZ6_Anim.hWnd = hWnd;
   BZ6_RndInit(hWnd);
   BZ6_TimerInit();

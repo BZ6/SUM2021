@@ -14,7 +14,7 @@ typedef struct
   bz6PRIM Pr;
   VEC Dir;
   MATR Cow;
-  INT Count;
+  BOOL IsDvig;
 } bz6UNIT_COW;
 
 /* Unit cow initialization function.
@@ -28,7 +28,7 @@ typedef struct
 static VOID BZ6_UnitInit( bz6UNIT_COW *Uni, bz6ANIM *Ani )
 {
   BZ6_RndPrimLoad(&Uni->Pr, "BIN/MODELS/cow.obj");
-  Uni->Count = 0;
+  Uni->IsDvig = FALSE;
   Uni->Pos = VecSet(1, 0, 5);
   Uni->Dir = VecSet(0, 0 ,-1);
   Uni->Cow = MatrMulMatr(MatrScale(VecSet1(0.1)), MatrRotateY(90));
@@ -48,17 +48,36 @@ static VOID BZ6_UnitResponse( bz6UNIT_COW *Uni, bz6ANIM *Ani )
 {
   VEC ve;
 
+  Uni->IsDvig = FALSE;
+
   Uni->Cow = MatrMulMatr(Uni->Cow, MatrRotate(Ani->DeltaTime * 400 * (Ani->Keys['A']- Ani->Keys['D']), VecSet(0, 1, 0)));
   Uni->Dir = VectorTransform(Uni->Dir, MatrRotate(Ani->DeltaTime * 400 * (Ani->Keys['A']- Ani->Keys['D']), VecSet(0, 1, 0)));
   ve = VecAddVec(Uni->Pos, VecMulNum(Uni->Dir, Ani->DeltaTime * 50 * (Ani->Keys['W']- Ani->Keys['S'])));
 
-  if (ve.X < 0.1 && ve.Z > -2.5 && ve.Z < 2.5 && ve.X > -0.1)
-    Uni->Count++;
-
   if (ve.X < 47.5 && ve.X > -48.5 && ve.Z < 47.5 && ve.Z > -48.5)
-    if ((ve.X < 1 || ve.X > 6 || ve.Z < -2.5 || ve.Z > 2.5) && (ve.X < -6 || ve.X > -1 || ve.Z < -2.5 || ve.Z > 2.5))
-      Uni->Pos = ve;
+    if ((ve.X < 1.5 || ve.X > 6 || ve.Z < -2.5 || ve.Z > 2.5) && (ve.X < -6 || ve.X > -1.5 || ve.Z < -2.5 || ve.Z > 2.5) && Ani->Count == 0)
+      Uni->IsDvig = TRUE;
+    else if ((ve.X < 21.5 || ve.X > 26 || ve.Z < 7.5 || ve.Z > 12.5) && (ve.X < 14 || ve.X > 19.5 || ve.Z < 7.5 || ve.Z > 12.5) && Ani->Count == 1)
+      Uni->IsDvig = TRUE;
+    else if ((ve.X < -19.5 || ve.X > -14 || ve.Z < -12.5 || ve.Z > -7.5) && (ve.X < -26 || ve.X > -21.5 || ve.Z < -12.5 || ve.Z > -7.5) && Ani->Count == 2)
+      Uni->IsDvig = TRUE;
 
+  if (Ani->Count == 0)
+    if (ve.X < 1.5 && ve.Z > -2.5 && ve.Z < 2.5 && ve.X > -1.5 && Uni->IsDvig)
+      Ani->Count = 1;
+
+  if (Ani->Count == 1)
+    if (ve.X < 21.5 && ve.Z > 7.5 && ve.Z < 12.5 && ve.X > 19.5 && Uni->IsDvig)
+      Ani->Count = 2;
+
+  if (Ani->Count == 2)
+    if (ve.X < -19.5 && ve.Z > -12.5 && ve.Z < -7.5 && ve.X > -21.5 && Uni->IsDvig)
+      Ani->Count = 0;
+
+  if (Uni->IsDvig)
+    Uni->Pos = ve;
+  else
+    Uni->Pos = Uni->Pos;
 } /* End of 'BZ6_UnitResponse' function */
 
 /* Unit cow render function.
@@ -73,7 +92,7 @@ static VOID BZ6_UnitRender( bz6UNIT_COW *Uni, bz6ANIM *Ani )
 {
   static CHAR Buf[10];
 
-  sprintf(Buf, "%i", Uni->Count);
+  sprintf(Buf, "%i", Ani->Count);
   SetWindowText(Ani->hWnd, Buf);
   BZ6_RndPrimDraw(&Uni->Pr, MatrMulMatr(Uni->Cow, MatrTranslate(Uni->Pos)));
 } /* End of 'BZ6_UnitRender' function */
@@ -89,7 +108,6 @@ static VOID BZ6_UnitRender( bz6UNIT_COW *Uni, bz6ANIM *Ani )
 static VOID BZ6_UnitClose( bz6UNIT_COW *Uni, bz6ANIM *Ani )
 {
   BZ6_RndPrimFree(&Uni->Pr);
-  Uni->Count = 0;
 } /* End of 'BZ6_UnitClose' function */
 
 /* Unit cow creation function.
