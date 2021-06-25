@@ -294,6 +294,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\units\u_tex.c"
+					>
+				</File>
+				<File
 					RelativePath=".\src\units\u_torus.c"
 					>
 				</File>

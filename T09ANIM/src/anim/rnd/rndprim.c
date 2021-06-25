@@ -108,7 +108,7 @@ VOID BZ6_RndPrimDraw( bz6PRIM *Pr, MATR World )
 
   /* Send matrix to OpenGL /v.1.0 */
   glLoadMatrixf(wvp.A[0]);
-
+  
   glBindVertexArray(Pr->VA);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Pr->IBuf);
   glDrawElements(GL_TRIANGLES, Pr->NumOfElements, GL_UNSIGNED_INT, NULL);

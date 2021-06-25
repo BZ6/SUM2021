@@ -87,10 +87,6 @@ static VOID BZ6_UnitResponse( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
  */
 static VOID BZ6_UnitRender( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
 { 
-  static CHAR Buf[10];
-
-  sprintf(Buf, "FPS: %.3f", Ani->FPS);
-  SetWindowText(Ani->hWnd, Buf);
   BZ6_RndCamSet(Uni->Pos, VecAddVec(Uni->CamDir, Uni->Pos), VecSet(0, 1, 0));
 } /* End of 'BZ6_UnitRender' function */
 

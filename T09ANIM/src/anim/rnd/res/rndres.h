@@ -82,6 +82,27 @@ typedef struct tagbz6TEXTURE
 extern bz6TEXTURE BZ6_RndTextures[BZ6_MAX_TEXTURES]; /* Array of textures */
 extern INT BZ6_RndTexturesSize;                      /* Textures array store size */
 
+/* Texture stock initialization function.
+ * ARGUMENTS: None.
+ * RETURNS: None.
+ */
+BZ6_RndTexInit( VOID );
+
+/* Texture image add in stock function.
+ * ARGUMENTS:
+ *   - name of image:
+ *       CHAR *Name; 
+ *   - size of image:
+ *       INT W, H;
+ *   - texture data:
+ *       VOID *Bits.
+ * RETURNS:
+ *   (INT) texture number.
+ */
+INT BZ6_RndTextureAddImg( CHAR *Name, INT W, INT H, VOID *Bits );
+INT BZ6_RndTextureAddFromFile( CHAR *FileName );
+VOID BZ6_RndTexClose( VOID );
+
 #endif /* __rndres_h_ */
 
 /* END OF 'rndres.h' FILE */
