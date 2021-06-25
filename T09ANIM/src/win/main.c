@@ -4,7 +4,7 @@
  * PURPOSE: 3D main module.
  */
 
-#include "../units/units.h"
+#include "../game/game.h"
 
 /* Window class name */
 #define BZ6_WND_CLASS_NAME "My Window Class Name"
@@ -114,25 +114,25 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
     return 0;
 
   case WM_CREATE:
-    BZ6_AnimInit(hWnd);
+    GameInit(hWnd);
     SetTimer(hWnd, 30, 1, NULL);
     return 0;
 
   case WM_SIZE:
-    BZ6_AnimResize(LOWORD(lParam), HIWORD(lParam));
+    GameResize(LOWORD(lParam), HIWORD(lParam));
     
     /* Redraw frame */
     SendMessage(hWnd, WM_TIMER, 30, 0);
     return 0;
 
   case WM_TIMER:
-    BZ6_AnimRender();
+    GameRender();
     InvalidateRect(hWnd, NULL, TRUE);
     return 0;
 
   case WM_PAINT:
     BeginPaint(hWnd, &ps);
-    BZ6_AnimCopyFrame();
+    GameCopyFrame();
     EndPaint(hWnd, &ps);
     return 0;
 
@@ -140,16 +140,8 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
     return 1;
 
   case WM_KEYDOWN:
-    if (wParam == 'F')
-      BZ6_AnimFlipFullScreen();
-    else if (wParam == 27)
+    if (wParam == 27)
       BZ6_AnimExit();
-    else if (wParam == 'Q')
-      BZ6_AnimAddUnit(BZ6_UnitCreateCow());
-    else if (wParam == 'E')
-      BZ6_AnimAddUnit(BZ6_UnitCreateCowRandom());
-    else if (wParam == 'X')
-      BZ6_AnimDelUnit();
     return 0;
 
   case WM_MOUSEWHEEL:
@@ -165,7 +157,7 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
     return 0;
 
   case WM_DESTROY:
-    BZ6_AnimClose();
+    GameClose();
     KillTimer(hWnd, 30);
     PostMessage(hWnd, WM_QUIT, 0, 0);
     return 0;

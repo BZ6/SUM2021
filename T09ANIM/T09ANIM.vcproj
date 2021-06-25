@@ -310,6 +310,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Game"
+				>
+				<File
+					RelativePath=".\src\game\game.c"
+					>
+				</File>
+				<File
+					RelativePath=".\src\game\game.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"

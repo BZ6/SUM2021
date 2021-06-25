@@ -27,7 +27,7 @@ typedef struct
  */
 static VOID BZ6_UnitInit( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
 {
-  Uni->Pos = VecSet(0, 0, 5);
+  Uni->Pos = VecSet(0, 10, 50);
   Uni->CamDir = VecSet(0, 0, -5);
   Uni->CamRight = VecSet(5, 0, 0);
   Uni->Speed = 2;
@@ -46,6 +46,14 @@ static VOID BZ6_UnitResponse( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
 {
   if (Ani->KeysClick['P'])
       BZ6_Anim.IsPause = !BZ6_Anim.IsPause;
+  if (Ani->KeysClick['F'])
+      BZ6_AnimFlipFullScreen();
+    else if (Ani->KeysClick['Q'])
+      BZ6_AnimAddUnit(BZ6_UnitCreateCow());
+    else if (Ani->KeysClick['E'])
+      BZ6_AnimAddUnit(BZ6_UnitCreateCowRandom());
+    else if (Ani->KeysClick['X'])
+      BZ6_AnimDelUnit();
 
   Uni->Pos =
     VecAddVec(Uni->Pos,

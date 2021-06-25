@@ -51,24 +51,24 @@ static VOID BZ6_UnitResponse( bz6UNIT_COW_RANDOM *Uni, bz6ANIM *Ani )
   ve = VecAddVec(Uni->Pos, VecMulNum(Uni->Dir, Ani->DeltaTime * 50 * (Ani->Keys[VK_UP]- Ani->Keys[VK_DOWN])));
   
   if (ve.X < 47.5 && ve.X > -48.5 && ve.Z < 47.5 && ve.Z > -48.5)
-    if ((ve.X < 1.5 || ve.X > 6 || ve.Z < -2.5 || ve.Z > 2.5) && (ve.X < -6 || ve.X > -1.5 || ve.Z < -2.5 || ve.Z > 2.5) && Ani->Count == 0)
+    if ((ve.X < 1.5 || ve.X > 6 || ve.Z < -2.5 || ve.Z > 2.5) && (ve.X < -6 || ve.X > -1.5 || ve.Z < -2.5 || ve.Z > 2.5) && Count == 0)
       Uni->IsDvig = TRUE;
-    else if ((ve.X < 21.5 || ve.X > 26 || ve.Z < 7.5 || ve.Z > 12.5) && (ve.X < 14 || ve.X > 19.5 || ve.Z < 7.5 || ve.Z > 12.5) && Ani->Count == 1)
+    else if ((ve.X < 21.5 || ve.X > 26 || ve.Z < 7.5 || ve.Z > 12.5) && (ve.X < 14 || ve.X > 19.5 || ve.Z < 7.5 || ve.Z > 12.5) && Count == 1)
       Uni->IsDvig = TRUE;
-    else if ((ve.X < -19.5 || ve.X > -14 || ve.Z < -12.5 || ve.Z > -7.5) && (ve.X < -26 || ve.X > -21.5 || ve.Z < -12.5 || ve.Z > -7.5) && Ani->Count == 2)
+    else if ((ve.X < -19.5 || ve.X > -14 || ve.Z < -12.5 || ve.Z > -7.5) && (ve.X < -26 || ve.X > -21.5 || ve.Z < -12.5 || ve.Z > -7.5) && Count == 2)
       Uni->IsDvig = TRUE;
 
-  if (Ani->Count == 0)
+  if (Count == 0)
     if (ve.X < 1.5 && ve.Z > -2.5 && ve.Z < 2.5 && ve.X > -1.5 && Uni->IsDvig)
-      Ani->Count = 1;
+      Count = 1;
 
-  if (Ani->Count == 1)
+  if (Count == 1)
     if (ve.X < 21.5 && ve.Z > 7.5 && ve.Z < 12.5 && ve.X > 19.5 && Uni->IsDvig)
-      Ani->Count = 2;
+      Count = 2;
 
-  if (Ani->Count == 2)
+  if (Count == 2)
     if (ve.X < -19.5 && ve.Z > -12.5 && ve.Z < -7.5 && ve.X > -21.5 && Uni->IsDvig)
-      Ani->Count = 0;
+      Count = 0;
 
 
   if (Uni->IsDvig)

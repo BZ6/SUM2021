@@ -53,11 +53,11 @@ static VOID BZ6_UnitResponse( bz6UNIT_COW_RANDOM *Uni, bz6ANIM *Ani )
   ve = VecAddVec(Uni->Pos, VecMulNum(Uni->Dir, Ani->DeltaTime * 50 * (Ani->Keys[VK_UP]- Ani->Keys[VK_DOWN])));
   
   if (ve.X < 47.5 && ve.X > -48.5 && ve.Z < 47.5 && ve.Z > -48.5)
-    if ((ve.X < 1.5 + Ani->RandomNumber || ve.X > 6 + Ani->RandomNumber || ve.Z < -2.5 + Ani->RandomNumber || ve.Z > 2.5 + Ani->RandomNumber) && (ve.X < -6 + Ani->RandomNumber || ve.X > -1.5 + Ani->RandomNumber || ve.Z < -2.5 + Ani->RandomNumber || ve.Z > 2.5 + Ani->RandomNumber))
+    if ((ve.X < 1.5 + RandomNumber || ve.X > 6 + RandomNumber || ve.Z < -2.5 + RandomNumber || ve.Z > 2.5 + RandomNumber) && (ve.X < -6 + RandomNumber || ve.X > -1.5 + RandomNumber || ve.Z < -2.5 + RandomNumber || ve.Z > 2.5 + RandomNumber))
       Uni->IsDvig = TRUE;
 
-  if (ve.X < 1.5 + Ani->RandomNumber && ve.Z > -2.5 + Ani->RandomNumber && ve.Z < 2.5 + Ani->RandomNumber && ve.X > -1.5 + Ani->RandomNumber && Uni->IsDvig)
-      Ani->RandomNumber = rand() % 80 - 40;
+  if (ve.X < 1.5 + RandomNumber && ve.Z > -2.5 + RandomNumber && ve.Z < 2.5 + RandomNumber && ve.X > -1.5 + RandomNumber && Uni->IsDvig)
+      RandomNumber = rand() % 80 - 40;
 
   if (Uni->IsDvig)
     Uni->Pos = ve;

@@ -55,11 +55,11 @@ static VOID BZ6_UnitResponse( bz6UNIT_COW *Uni, bz6ANIM *Ani )
   ve = VecAddVec(Uni->Pos, VecMulNum(Uni->Dir, Ani->DeltaTime * 50 * (Ani->Keys['W']- Ani->Keys['S'])));
 
   if (ve.X < 47.5 && ve.X > -48.5 && ve.Z < 47.5 && ve.Z > -48.5)
-    if ((ve.X < 1.5 + Ani->RandomNumber || ve.X > 6 + Ani->RandomNumber || ve.Z < -2.5 + Ani->RandomNumber || ve.Z > 2.5 + Ani->RandomNumber) && (ve.X < -6 + Ani->RandomNumber || ve.X > -1.5 + Ani->RandomNumber || ve.Z < -2.5 + Ani->RandomNumber || ve.Z > 2.5 + Ani->RandomNumber))
+    if ((ve.X < 1.5 + RandomNumber || ve.X > 6 + RandomNumber || ve.Z < -2.5 + RandomNumber || ve.Z > 2.5 + RandomNumber) && (ve.X < -6 + RandomNumber || ve.X > -1.5 + RandomNumber || ve.Z < -2.5 + RandomNumber || ve.Z > 2.5 + RandomNumber))
       Uni->IsDvig = TRUE;
 
-  if (ve.X < 1.5 + Ani->RandomNumber && ve.Z > -2.5 + Ani->RandomNumber && ve.Z < 2.5 + Ani->RandomNumber && ve.X > -1.5 + Ani->RandomNumber && Uni->IsDvig)
-      Ani->RandomNumber = rand() % 80 - 40;
+  if (ve.X < 1.5 + RandomNumber && ve.Z > -2.5 + RandomNumber && ve.Z < 2.5 + RandomNumber && ve.X > -1.5 + RandomNumber && Uni->IsDvig)
+      RandomNumber = rand() % 80 - 40;
 
   if (Uni->IsDvig)
     Uni->Pos = ve;
@@ -68,24 +68,24 @@ static VOID BZ6_UnitResponse( bz6UNIT_COW *Uni, bz6ANIM *Ani )
 
   /*
   if (ve.X < 47.5 && ve.X > -48.5 && ve.Z < 47.5 && ve.Z > -48.5)
-    if ((ve.X < 1.5 || ve.X > 6 || ve.Z < -2.5 || ve.Z > 2.5) && (ve.X < -6 || ve.X > -1.5 || ve.Z < -2.5 || ve.Z > 2.5) && Ani->Count == 0)
+    if ((ve.X < 1.5 || ve.X > 6 || ve.Z < -2.5 || ve.Z > 2.5) && (ve.X < -6 || ve.X > -1.5 || ve.Z < -2.5 || ve.Z > 2.5) && Count == 0)
       Uni->IsDvig = TRUE;
-    else if ((ve.X < 21.5 || ve.X > 26 || ve.Z < 7.5 || ve.Z > 12.5) && (ve.X < 14 || ve.X > 19.5 || ve.Z < 7.5 || ve.Z > 12.5) && Ani->Count == 1)
+    else if ((ve.X < 21.5 || ve.X > 26 || ve.Z < 7.5 || ve.Z > 12.5) && (ve.X < 14 || ve.X > 19.5 || ve.Z < 7.5 || ve.Z > 12.5) && Count == 1)
       Uni->IsDvig = TRUE;
-    else if ((ve.X < -19.5 || ve.X > -14 || ve.Z < -12.5 || ve.Z > -7.5) && (ve.X < -26 || ve.X > -21.5 || ve.Z < -12.5 || ve.Z > -7.5) && Ani->Count == 2)
+    else if ((ve.X < -19.5 || ve.X > -14 || ve.Z < -12.5 || ve.Z > -7.5) && (ve.X < -26 || ve.X > -21.5 || ve.Z < -12.5 || ve.Z > -7.5) && Count == 2)
       Uni->IsDvig = TRUE;
 
-  if (Ani->Count == 0)
+  if (Count == 0)
     if (ve.X < 1.5 && ve.Z > -2.5 && ve.Z < 2.5 && ve.X > -1.5 && Uni->IsDvig)
-      Ani->Count = 1;
+      Count = 1;
 
-  if (Ani->Count == 1)
+  if (Count == 1)
     if (ve.X < 21.5 && ve.Z > 7.5 && ve.Z < 12.5 && ve.X > 19.5 && Uni->IsDvig)
-      Ani->Count = 2;
+      Count = 2;
 
-  if (Ani->Count == 2)
+  if (Count == 2)
     if (ve.X < -19.5 && ve.Z > -12.5 && ve.Z < -7.5 && ve.X > -21.5 && Uni->IsDvig)
-      Ani->Count = 0;
+      Count = 0;
 
   if (Uni->IsDvig)
     Uni->Pos = ve;
@@ -105,7 +105,7 @@ static VOID BZ6_UnitRender( bz6UNIT_COW *Uni, bz6ANIM *Ani )
 {
   static CHAR Buf[10];
 
-  sprintf(Buf, "%i", Ani->RandomNumber);
+  sprintf(Buf, "%i", RandomNumber);
   SetWindowText(Ani->hWnd, Buf);
   BZ6_RndPrimDraw(&Uni->Pr, MatrMulMatr(Uni->Cow, MatrTranslate(Uni->Pos)));
 } /* End of 'BZ6_UnitRender' function */

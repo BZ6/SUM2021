@@ -9,6 +9,9 @@
 
 #include "../anim/anim.h"
 
+extern INT Count;
+extern INT RandomNumber;
+
 /* Unit ball creation function.
  * ARGUMENTS: None.
  * RETURNS:
