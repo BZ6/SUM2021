@@ -9,6 +9,8 @@
 
 #include "../anim/anim.h"
 
+extern VEC PosCowSecond;
+extern VEC PosCowFirst;
 extern INT Count;
 extern INT RandomNumber;
 
