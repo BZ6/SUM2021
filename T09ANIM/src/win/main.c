@@ -127,7 +127,7 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
 
   case WM_TIMER:
     GameRender();
-    InvalidateRect(hWnd, NULL, TRUE);
+    SendMessage(hWnd, IsGameRestart(), 0, 0);
     return 0;
 
   case WM_PAINT:
@@ -154,6 +154,31 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
 
   case WM_LBUTTONUP:
     ReleaseCapture();
+    return 0;
+
+  case WM_CLOSE:
+    if (CountFirst == 2)
+      if (MessageBox(hWnd, "The Player 1 win\nWant to try again?", "Game Over", MB_RETRYCANCEL | MB_ICONQUESTION ) == IDRETRY)
+      {
+        srand(30);
+        BZ6_AnimDelUnit();
+        BZ6_AnimDelUnit();
+        BZ6_AnimAddUnit(BZ6_UnitCreateCow());
+        BZ6_AnimAddUnit(BZ6_UnitCreateCowRandom());
+      }
+      else
+        break;
+    if (CountSecond == 2)
+      if (MessageBox(hWnd, "The Player 2 win\nWant to try again?", "Game Over", MB_RETRYCANCEL | MB_ICONQUESTION ) == IDRETRY)
+      {
+        srand(30);
+        BZ6_AnimDelUnit();
+        BZ6_AnimDelUnit();
+        BZ6_AnimAddUnit(BZ6_UnitCreateCow());
+        BZ6_AnimAddUnit(BZ6_UnitCreateCowRandom());
+      }
+      else
+        break;
     return 0;
 
   case WM_DESTROY:

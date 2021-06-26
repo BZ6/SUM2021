@@ -13,9 +13,13 @@ typedef struct
   bz6PRIM Pr;
 } bz6UNIT_TORUS;
 
+INT RandomNumberX;
+INT RandomNumberZ;
 
-INT Count;
-INT RandomNumber;
+static FLT Distance( VEC PositionCircle, VEC PositionObject )
+{
+  return VecLen(VecSubVec(PositionCircle, PositionObject));
+}
 
 /* Unit torus initialization function.
  * ARGUMENTS:
@@ -27,7 +31,6 @@ INT RandomNumber;
  */
 static VOID BZ6_UnitInit( bz6UNIT_TORUS *Uni, bz6ANIM *Ani )
 { 
-
   Uni->Pos = VecSet(0, 0, 0);
   BZ6_RndPrimCreateTorus(&Uni->Pr, Uni->Pos, 1, 3, 30, 20);
 } /* End of 'BZ6_UnitInit' function */
@@ -41,7 +44,13 @@ static VOID BZ6_UnitInit( bz6UNIT_TORUS *Uni, bz6ANIM *Ani )
  * RETURNS: None.
  */
 static VOID BZ6_UnitResponse( bz6UNIT_TORUS *Uni, bz6ANIM *Ani )
-{
+{ 
+  if (RandomNumberX == 0)
+    RandomNumberX = rand() % 80 - 40, RandomNumberZ = rand() % 80 - 40;
+
+  if (Distance(VecSet(3.5 + RandomNumberX, 0, RandomNumberZ), PosCowSecond) <= 2.6 || Distance(VecSet(-3.5 + RandomNumberX, 0, RandomNumberZ), PosCowSecond) <= 2.6 ||
+      Distance(VecSet(3.5 + RandomNumberX, 0, RandomNumberZ), PosCowFirst) <= 2.6 || Distance(VecSet(-3.5 + RandomNumberX, 0, RandomNumberZ), PosCowFirst) <= 2.6)
+    RandomNumberX = rand() % 80 - 40, RandomNumberZ = rand() % 80 - 40;
 } /* End of 'BZ6_UnitResponse' function */
 
 /* Unit torus render function.
@@ -54,9 +63,7 @@ static VOID BZ6_UnitResponse( bz6UNIT_TORUS *Uni, bz6ANIM *Ani )
  */
 static VOID BZ6_UnitRender( bz6UNIT_TORUS *Uni, bz6ANIM *Ani )
 {
-  if (RandomNumber == 0)
-    RandomNumber = rand() % 80 - 40;
-  BZ6_RndPrimDraw(&Uni->Pr, MatrMulMatr3(MatrRotateX(-90), MatrRotateZ(-90), MatrTranslate(VecSet(RandomNumber, -0.5, RandomNumber))));
+  BZ6_RndPrimDraw(&Uni->Pr, MatrMulMatr3(MatrRotateX(-90), MatrRotateZ(-90), MatrTranslate(VecSet(RandomNumberX, -0.5, RandomNumberZ))));
   /*
   if (Count == 0)
     BZ6_RndPrimDraw(&Uni->Pr, MatrMulMatr3(MatrRotateX(-90), MatrRotateZ(-90), MatrTranslate(VecSet(0, -0.5, 0))));

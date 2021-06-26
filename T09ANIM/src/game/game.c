@@ -15,8 +15,9 @@
  */
 VOID GameInit( HWND hWnd )
 {
-  RandomNumber = 0;
-  Count = 0;
+  RandomNumberX = 0;
+  CountFirst = 0;
+  CountSecond = 0;
   BZ6_AnimInit(hWnd);
 } /* End of 'GameInit' function */
 
@@ -65,5 +66,28 @@ VOID GameClose( VOID )
 {
   BZ6_AnimClose();
 } /* End of 'GameClose' function */
+
+/* Game restart function.
+ * ARGUMENTS:
+ *   NONE;
+ * RETURNS:
+ *   (INT) if is it first WM_CLOSE, else WM_PAINT.
+ */
+INT IsGameRestart( VOID )
+{
+  static BOOL Is_Play;
+
+  if (CountFirst == 2 && !Is_Play)
+  {
+    Is_Play = !Is_Play;
+    return WM_CLOSE;
+  }
+  if (CountSecond == 2 && !Is_Play)
+  {
+    Is_Play = !Is_Play;
+    return WM_CLOSE;
+  }
+  return WM_PAINT;
+} /* End of 'GameRestart' function */
 
 /* END OF 'game.c' FILE */

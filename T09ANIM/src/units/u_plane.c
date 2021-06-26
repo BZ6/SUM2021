@@ -4,6 +4,7 @@
  * PURPOSE: 3D animation plane unit module.
  */
 
+#include <stdio.h>
 #include "units.h"
 
 typedef struct
@@ -37,6 +38,10 @@ static VOID BZ6_UnitInit( bz6UNIT_TEX *Uni, bz6ANIM *Ani )
  */
 static VOID BZ6_UnitRender( bz6UNIT_TEX *Uni, bz6ANIM *Ani )
 {
+  /* static CHAR Buf[10];
+
+  sprintf(Buf, "%i %i", CountFirst, CountSecond);
+  SetWindowText(Ani->hWnd, Buf); */
   BZ6_RndPrimDraw(&Uni->Pr, MatrTranslate(VecSet(0, 0, 0)));
 } /* End of 'BZ6_UnitRender' function */
 

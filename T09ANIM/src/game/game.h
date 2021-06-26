@@ -50,6 +50,14 @@ VOID GameCopyFrame( VOID );
  */
 VOID GameClose( VOID );
 
+/* Game restart function.
+ * ARGUMENTS:
+ *   NONE;
+ * RETURNS:
+ *   NONE.
+ */
+INT IsGameRestart( VOID );
+
 #endif /* __game_h_ */
 
 /* END OF 'game.h' FILE */

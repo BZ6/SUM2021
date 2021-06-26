@@ -49,7 +49,7 @@ static VOID BZ6_UnitResponse( bz6UNIT_COW_RANDOM *Uni, bz6ANIM *Ani )
   Uni->Cow = MatrMulMatr(Uni->Cow, MatrRotate(Ani->DeltaTime * 400 * (Ani->Keys[VK_LEFT]- Ani->Keys[VK_RIGHT]), VecSet(0, 1, 0)));
   Uni->Dir = VectorTransform(Uni->Dir, MatrRotate(Ani->DeltaTime * 400 * (Ani->Keys[VK_LEFT]- Ani->Keys[VK_RIGHT]), VecSet(0, 1, 0)));
   ve = VecAddVec(Uni->Pos, VecMulNum(Uni->Dir, Ani->DeltaTime * 50 * (Ani->Keys[VK_UP]- Ani->Keys[VK_DOWN])));
-  
+  /*
   if (ve.X < 47.5 && ve.X > -48.5 && ve.Z < 47.5 && ve.Z > -48.5)
     if ((ve.X < 1.5 || ve.X > 6 || ve.Z < -2.5 || ve.Z > 2.5) && (ve.X < -6 || ve.X > -1.5 || ve.Z < -2.5 || ve.Z > 2.5) && Count == 0)
       Uni->IsDvig = TRUE;
@@ -75,7 +75,7 @@ static VOID BZ6_UnitResponse( bz6UNIT_COW_RANDOM *Uni, bz6ANIM *Ani )
     Uni->Pos = ve;
   else
     Uni->Pos = Uni->Pos;
-
+   */
 } /* End of 'BZ6_UnitResponse' function */
 
 /* Unit cow render function.

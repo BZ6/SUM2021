@@ -11,8 +11,10 @@
 
 extern VEC PosCowSecond;
 extern VEC PosCowFirst;
-extern INT Count;
-extern INT RandomNumber;
+extern INT CountFirst;
+extern INT CountSecond;
+extern INT RandomNumberX;
+extern INT RandomNumberZ;
 
 /* Unit ball creation function.
  * ARGUMENTS: None.

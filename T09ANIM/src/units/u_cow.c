@@ -4,18 +4,24 @@
  * PURPOSE: 3D animation cow unit module.
  */
 
-#include <stdio.h>
 #include "units.h"
+
+VEC PosCowFirst;
+INT CountFirst;
 
 typedef struct
 {
   BZ6_UNIT_BASE_FIELDS;
-  VEC Pos;
   bz6PRIM Pr;
   VEC Dir;
   MATR Cow;
   BOOL IsDvig;
 } bz6UNIT_COW;
+
+static FLT Distance( VEC PositionCircle, VEC PositionObject )
+{
+  return VecLen(VecSubVec(PositionCircle, PositionObject));
+}
 
 /* Unit cow initialization function.
  * ARGUMENTS:
@@ -29,7 +35,7 @@ static VOID BZ6_UnitInit( bz6UNIT_COW *Uni, bz6ANIM *Ani )
 {
   BZ6_RndPrimLoad(&Uni->Pr, "BIN/MODELS/cow.obj");
   Uni->IsDvig = FALSE;
-  Uni->Pos = VecSet(1, 0, 5);
+  PosCowFirst = VecSet(1, 0, 5);
   Uni->Dir = VecSet(0, 0 ,-1);
   Uni->Cow = MatrMulMatr(MatrScale(VecSet1(0.1)), MatrRotateY(90));
   BZ6_RndShadersClose();
@@ -52,19 +58,19 @@ static VOID BZ6_UnitResponse( bz6UNIT_COW *Uni, bz6ANIM *Ani )
 
   Uni->Cow = MatrMulMatr(Uni->Cow, MatrRotate(Ani->DeltaTime * 400 * (Ani->Keys['A']- Ani->Keys['D']), VecSet(0, 1, 0)));
   Uni->Dir = VectorTransform(Uni->Dir, MatrRotate(Ani->DeltaTime * 400 * (Ani->Keys['A']- Ani->Keys['D']), VecSet(0, 1, 0)));
-  ve = VecAddVec(Uni->Pos, VecMulNum(Uni->Dir, Ani->DeltaTime * 50 * (Ani->Keys['W']- Ani->Keys['S'])));
+  ve = VecAddVec(PosCowFirst, VecMulNum(Uni->Dir, Ani->DeltaTime * 50 * (Ani->Keys['W']- Ani->Keys['S'])));
 
   if (ve.X < 47.5 && ve.X > -48.5 && ve.Z < 47.5 && ve.Z > -48.5)
-    if ((ve.X < 1.5 + RandomNumber || ve.X > 6 + RandomNumber || ve.Z < -2.5 + RandomNumber || ve.Z > 2.5 + RandomNumber) && (ve.X < -6 + RandomNumber || ve.X > -1.5 + RandomNumber || ve.Z < -2.5 + RandomNumber || ve.Z > 2.5 + RandomNumber))
+    if (Distance(VecSet(3.5 + RandomNumberX, 0, RandomNumberZ), ve) > 2.6 && Distance(VecSet(-3.5 + RandomNumberX, 0, RandomNumberZ), ve) > 2.6)
       Uni->IsDvig = TRUE;
 
-  if (ve.X < 1.5 + RandomNumber && ve.Z > -2.5 + RandomNumber && ve.Z < 2.5 + RandomNumber && ve.X > -1.5 + RandomNumber && Uni->IsDvig)
-      RandomNumber = rand() % 80 - 40;
+  if (ve.X < 1.5 + RandomNumberX && ve.Z > -2 + RandomNumberZ && ve.Z < 2 + RandomNumberZ && ve.X > -1.5 + RandomNumberX && Uni->IsDvig)
+      RandomNumberX = rand() % 80 - 40, RandomNumberZ = rand() % 80 - 40, CountFirst++;
 
   if (Uni->IsDvig)
-    Uni->Pos = ve;
+    PosCowFirst = ve;
   else
-    Uni->Pos = Uni->Pos;
+    PosCowFirst = PosCowFirst;
 
   /*
   if (ve.X < 47.5 && ve.X > -48.5 && ve.Z < 47.5 && ve.Z > -48.5)
@@ -103,11 +109,7 @@ static VOID BZ6_UnitResponse( bz6UNIT_COW *Uni, bz6ANIM *Ani )
  */
 static VOID BZ6_UnitRender( bz6UNIT_COW *Uni, bz6ANIM *Ani )
 {
-  static CHAR Buf[10];
-
-  sprintf(Buf, "%i", RandomNumber);
-  SetWindowText(Ani->hWnd, Buf);
-  BZ6_RndPrimDraw(&Uni->Pr, MatrMulMatr(Uni->Cow, MatrTranslate(Uni->Pos)));
+  BZ6_RndPrimDraw(&Uni->Pr, MatrMulMatr(Uni->Cow, MatrTranslate(PosCowFirst)));
 } /* End of 'BZ6_UnitRender' function */
 
 /* Unit cow deinitialization function.
