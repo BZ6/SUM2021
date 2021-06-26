@@ -236,9 +236,21 @@
 						RelativePath=".\src\anim\rnd\rndprim.c"
 						>
 					</File>
+					<File
+						RelativePath=".\src\anim\rnd\rndprims.c"
+						>
+					</File>
 					<Filter
 						Name="Resourses"
 						>
+						<File
+							RelativePath=".\src\anim\rnd\res\rndmtl.c"
+							>
+						</File>
+						<File
+							RelativePath=".\src\anim\rnd\res\rndres.c"
+							>
+						</File>
 						<File
 							RelativePath=".\src\anim\rnd\res\rndres.h"
 							>
@@ -287,6 +299,10 @@
 				</File>
 				<File
 					RelativePath=".\src\units\u_fence.c"
+					>
+				</File>
+				<File
+					RelativePath=".\src\units\u_objectgdm.c"
 					>
 				</File>
 				<File

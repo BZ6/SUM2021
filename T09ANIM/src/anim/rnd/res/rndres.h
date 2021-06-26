@@ -99,9 +99,67 @@ BZ6_RndTexInit( VOID );
  * RETURNS:
  *   (INT) texture number.
  */
-INT BZ6_RndTextureAddImg( CHAR *Name, INT W, INT H, VOID *Bits );
+INT BZ6_RndTextureAddImg( CHAR *Name, INT W, INT H, INT C, VOID *Bits );
+
+/* Texture image add from file function.
+ * ARGUMENTS:
+ *   - name of image:
+ *       CHAR *FileName; 
+ * RETURNS:
+ *   (INT) texture number.
+ */
 INT BZ6_RndTextureAddFromFile( CHAR *FileName );
+
+/* Texture delete in stock function.
+ * ARGUMENTS:
+ *   - texture number:
+ *       INT TexNo; 
+ * RETURNS: NONE.
+ */
+VOID BZ6_RndTextureDelete( INT TexNo );
+
+/* Texture close function.
+ * ARGUMENTS: NONE; 
+ * RETURNS: NONE.
+ */
 VOID BZ6_RndTexClose( VOID );
+
+/***
+ * Materials stock functions
+ ***/
+
+/* Material store type */
+typedef struct tagbz6MATERIAL
+{
+  CHAR Name[BZ6_STR_MAX]; /* Material name */
+
+
+  /* Illumination coefficients */    
+  VEC Ka, Kd, Ks;           /* Ambient, diffuse, specular coefficients */
+  FLT Ph;                   /* Phong power coefficient */
+
+  FLT Trans;                /* Transparency factor */
+  INT Tex[8];               /* Texture references from texture table (or -1) */
+
+  INT ShdNo;                /* Shader number in shader table */
+} bz6MATERIAL;
+
+/* Material stock */
+#define BZ6_MAX_MATERIALS 300
+bz6MATERIAL BZ6_RndMaterials[BZ6_MAX_MATERIALS]; /* Array of materials */
+INT BZ6_RndMaterialsSize;                        /* Materials array store size */
+
+INT BZ6_RndMtlApply( INT MtlNo );
+INT BZ6_RndMaterialAdd( bz6MATERIAL *Mtl );
+VOID BZ6_RndMtlInit( VOID );
+VOID BZ6_RndMtlClose( VOID );
+
+/***
+ * Resourses functions
+ ***/
+
+VOID BZ6_RndResInit( VOID );
+VOID BZ6_RndResClose( VOID );
 
 #endif /* __rndres_h_ */
 

@@ -83,8 +83,10 @@ VOID BZ6_RndInit( HWND hWnd )
   wglSwapIntervalEXT(0);
   glClearColor(0.30, 0.47, 0.8, 1);
 
-  BZ6_RndShadersInit();
-  BZ6_RndTexInit();
+  BZ6_RndMtlInit();
+
+  glEnable(GL_PRIMITIVE_RESTART);
+  glPrimitiveRestartIndex(-1);
 
   BZ6_hRndWnd = hWnd;
 
@@ -103,8 +105,7 @@ VOID BZ6_RndInit( HWND hWnd )
  */
 VOID BZ6_RndClose( VOID )
 {
-  BZ6_RndTexClose();
-  BZ6_RndShadersClose();
+  BZ6_RndMtlClose();
   wglMakeCurrent(NULL, NULL);
   wglDeleteContext(BZ6_hRndGLRC);
   ReleaseDC(BZ6_hRndWnd, BZ6_hRndDC);

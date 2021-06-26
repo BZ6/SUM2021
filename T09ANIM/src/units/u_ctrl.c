@@ -71,9 +71,8 @@ static VOID BZ6_UnitResponse( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
 
   /* Joystick */
   Uni->CamDir = VectorTransform(Uni->CamDir, MatrRotate(-Ani->GlobalDeltaTime * Uni->AngleSpeed * Ani->JY, Uni->CamRight));
-  
+
   Uni->CamRight = VectorTransform(Uni->CamRight, MatrRotate(-Ani->GlobalDeltaTime * Uni->AngleSpeed * Ani->JX, VecSet(0, 1, 0)));
-  
   Uni->CamDir = VectorTransform(Uni->CamDir, MatrRotate(-Ani->GlobalDeltaTime * Uni->AngleSpeed * Ani->JX, VecSet(0, 1, 0)));
 
   Uni->Pos =
@@ -82,7 +81,17 @@ static VOID BZ6_UnitResponse( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
 
   Uni->Pos =
     VecAddVec(Uni->Pos,
-    VecMulNum(Uni->CamDir, -Ani->GlobalDeltaTime * Uni->Speed * Ani->JZ)); 
+    VecMulNum(Uni->CamDir, -Ani->GlobalDeltaTime * Uni->Speed * Ani->JZ));
+
+  /* Keyboard */
+  Uni->Pos = VecAddVec(Uni->Pos, VecMulNum(Uni->CamDir, Ani->DeltaTime * Uni->Speed * (Ani->Keys[VK_NUMPAD8] - Ani->Keys[VK_NUMPAD5])));
+
+  Uni->Pos = VecAddVec(Uni->Pos, VecMulNum(Uni->CamRight, -Ani->DeltaTime * Uni->Speed * (Ani->Keys[VK_NUMPAD4] - Ani->Keys[VK_NUMPAD6])));
+  
+  Uni->CamDir = VectorTransform(Uni->CamDir, MatrRotate(Ani->GlobalDeltaTime * Uni->AngleSpeed * (Ani->Keys[VK_ADD] - Ani->Keys[VK_RETURN]), Uni->CamRight));
+  
+  Uni->CamRight = VectorTransform(Uni->CamRight, MatrRotate(Ani->GlobalDeltaTime * Uni->AngleSpeed * (Ani->Keys[VK_NUMPAD7] - Ani->Keys[VK_NUMPAD9]), VecSet(0, 1, 0)));
+  Uni->CamDir = VectorTransform(Uni->CamDir, MatrRotate(Ani->GlobalDeltaTime * Uni->AngleSpeed * (Ani->Keys[VK_NUMPAD7] - Ani->Keys[VK_NUMPAD9]), VecSet(0, 1, 0)));
 } /* End of 'BZ6_UnitResponse' function */
 
 /* Unit plane render function.
@@ -94,8 +103,14 @@ static VOID BZ6_UnitResponse( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
  * RETURNS: None.
  */
 static VOID BZ6_UnitRender( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
-{ 
+{
+  INT loc, prg = BZ6_RndShaders[0].ProgId;
+
+  glUseProgram(prg);
+  if ((loc = glGetUniformLocation(prg, "CamLoc")) != -1)
+    glUniform3fv(loc, 1, &Uni->Pos.X);
   BZ6_RndCamSet(Uni->Pos, VecAddVec(Uni->CamDir, Uni->Pos), VecSet(0, 1, 0));
+  glUseProgram(0);
 } /* End of 'BZ6_UnitRender' function */
 
 /* Unit plane deinitialization function.

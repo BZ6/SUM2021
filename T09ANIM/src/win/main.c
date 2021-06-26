@@ -4,6 +4,8 @@
  * PURPOSE: 3D main module.
  */
 
+#include <stdio.h>
+
 #include "../game/game.h"
 
 /* Window class name */
@@ -68,12 +70,13 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   UpdateWindow(hWnd);
 
   BZ6_AnimAddUnit(BZ6_UnitCreateCtrl());
-  BZ6_AnimAddUnit(BZ6_UnitCreatePlane());
-  BZ6_AnimAddUnit(BZ6_UnitCreateTorus());
-  BZ6_AnimAddUnit(BZ6_UnitCreateFence());
-  BZ6_AnimAddUnit(BZ6_UnitCreateCow());
-  BZ6_AnimAddUnit(BZ6_UnitCreateCowRandom());
+  //BZ6_AnimAddUnit(BZ6_UnitCreatePlane());
+  //BZ6_AnimAddUnit(BZ6_UnitCreateTorus());
+  //BZ6_AnimAddUnit(BZ6_UnitCreateFence());
   //BZ6_AnimAddUnit(BZ6_UnitCreateTex());
+  //BZ6_AnimAddUnit(BZ6_UnitCreateCow());
+  //BZ6_AnimAddUnit(BZ6_UnitCreateCowRandom());
+  BZ6_AnimAddUnit(BZ6_UnitCreateObject());
 
   /* Message loop */
   while (TRUE)
@@ -105,6 +108,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
 LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam )
 {
   PAINTSTRUCT ps;
+  static CHAR Buf[100];
 
   switch (Msg)
   {
@@ -157,8 +161,10 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
     return 0;
 
   case WM_CLOSE:
-    if (CountFirst == 2)
-      if (MessageBox(hWnd, "The Player 1 win\nWant to try again?", "Game Over", MB_RETRYCANCEL | MB_ICONQUESTION ) == IDRETRY)
+    if (CountFirst == 10)
+    { 
+      sprintf(Buf, "Player 1: %i\nPlayer 2: %i\nThe Player 1 win\nWant to try again?", CountFirst, CountSecond);
+      if (MessageBox(hWnd, Buf, "Game Over", MB_RETRYCANCEL | MB_ICONQUESTION ) == IDRETRY)
       {
         srand(30);
         BZ6_AnimDelUnit();
@@ -168,8 +174,11 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
       }
       else
         break;
-    if (CountSecond == 2)
-      if (MessageBox(hWnd, "The Player 2 win\nWant to try again?", "Game Over", MB_RETRYCANCEL | MB_ICONQUESTION ) == IDRETRY)
+    }
+    if (CountSecond == 10)
+    {
+      sprintf(Buf, "Player 1: %i\nPlayer 2: %i\nThe Player 2 win\nWant to try again?", CountFirst, CountSecond);
+      if (MessageBox(hWnd, Buf, "Game Over", MB_RETRYCANCEL | MB_ICONQUESTION ) == IDRETRY)
       {
         srand(30);
         BZ6_AnimDelUnit();
@@ -179,6 +188,7 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
       }
       else
         break;
+    }
     return 0;
 
   case WM_DESTROY:

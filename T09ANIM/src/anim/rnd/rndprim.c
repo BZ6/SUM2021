@@ -23,7 +23,7 @@
  *       INT NumOfI;
  * RETURNS: None.
  */
-VOID BZ6_RndPrimCreate( bz6PRIM *Pr, bz6VERTEX *V, INT NumOfV, INT *I, INT NumOfI )
+VOID BZ6_RndPrimCreate( bz6PRIM *Pr, bz6PRIM_TYPE Type, bz6VERTEX *V, INT NumOfV, INT *I, INT NumOfI )
 {
   memset(Pr, 0, sizeof(bz6PRIM));   /* <-- <string.h> */
 
@@ -61,6 +61,7 @@ VOID BZ6_RndPrimCreate( bz6PRIM *Pr, bz6VERTEX *V, INT NumOfV, INT *I, INT NumOf
   }
   else
     Pr->NumOfElements = NumOfV;
+  Pr->Type = Type;
   Pr->Trans = MatrIdentity();
 } /* End of 'BZ6_RndPrimCreate' function */
 
@@ -96,6 +97,11 @@ VOID BZ6_RndPrimDraw( bz6PRIM *Pr, MATR World )
   MATR wvp = MatrMulMatr3(Pr->Trans, World, BZ6_RndMatrVP);
   INT ProgId = BZ6_RndShaders[0].ProgId;
   INT loc;
+  INT gl_prim_type = Pr->Type == BZ6_RND_PRIM_LINES ? GL_LINES :
+                   Pr->Type == BZ6_RND_PRIM_TRIMESH ? GL_TRIANGLES :
+                   Pr->Type == BZ6_RND_PRIM_TRISTRIP ? GL_TRIANGLE_STRIP :
+                   GL_POINTS;
+
 
   glUseProgram(ProgId);
 
@@ -105,13 +111,17 @@ VOID BZ6_RndPrimDraw( bz6PRIM *Pr, MATR World )
     glUniform1f(loc, BZ6_Anim.Time);
   if ((loc = glGetUniformLocation(ProgId, "Tex")) != -1)
     glUniform1i(loc, 1);
+  if ((loc = glGetUniformLocation(ProgId, "PositionCowFirst")) != -1)
+    glUniform3fv(loc, 1, &PosCowFirst.X);
+  if ((loc = glGetUniformLocation(ProgId, "PositionCowSecond")) != -1)
+    glUniform3fv(loc, 1, &PosCowSecond.X);
 
   /* Send matrix to OpenGL /v.1.0 */
   glLoadMatrixf(wvp.A[0]);
   
   glBindVertexArray(Pr->VA);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Pr->IBuf);
-  glDrawElements(GL_TRIANGLES, Pr->NumOfElements, GL_UNSIGNED_INT, NULL);
+  glDrawElements(gl_prim_type, Pr->NumOfElements, GL_UNSIGNED_INT, NULL);
   glBindVertexArray(0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
   glUseProgram(0);
@@ -242,7 +252,7 @@ VOID BZ6_RndPrimCreateGrid( bz6PRIM *Pr, INT GridW, INT GridH, bz6VERTEX *V )
     V[i].C = Vec4Set(0.3 * nl, 0.995 * nl, 0.991 * nl, 1);
   }
 
-  BZ6_RndPrimCreate(Pr, V, GridW * GridH, Ind, (GridH - 1) * (GridW - 1) * 6);
+  BZ6_RndPrimCreate(Pr, BZ6_RND_PRIM_TRIMESH, V, GridW * GridH, Ind, (GridH - 1) * (GridW - 1) * 6);
   free(Ind);
 } /* End of 'BZ6_RndPrimCreateGrid' function */
 
@@ -388,7 +398,7 @@ BOOL BZ6_RndPrimLoad( bz6PRIM *Pr, CHAR *FileName )
       nl = 0.1;
     V[i].C = Vec4Set(0.3 * nl, 0.2 * nl, 0.1 * nl, 1);
   }
-  BZ6_RndPrimCreate(Pr, V, nv, Ind, nind);
+  BZ6_RndPrimCreate(Pr, BZ6_RND_PRIM_TRIMESH, V, nv, Ind, nind);
   free(V);
   return TRUE;
 } /* End of 'BZ6_RndPrimLoad' function */

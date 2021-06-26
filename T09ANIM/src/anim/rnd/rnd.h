@@ -33,6 +33,11 @@ extern MATR
   BZ6_RndMatrProj, /* Projection coordinate system matrix */
   BZ6_RndMatrVP;   /* Stored (View * Proj) matrix */
 
+/* Positions cows */
+extern VEC 
+  PosCowSecond,
+  PosCowFirst;
+
 /* Vertex type */
 typedef struct tagbz6VERTEX
 {
@@ -43,15 +48,26 @@ typedef struct tagbz6VERTEX
 } bz6VERTEX;
 
 /* Primitive type */
+typedef enum tagbz6PRIM_TYPE
+{
+  BZ6_RND_PRIM_TRIMESH,  /* Triangle mesh - array of triangles */
+  BZ6_RND_PRIM_TRISTRIP, /* Triangle strip - array of stripped triangles */
+  BZ6_RND_PRIM_LINES,    /* Line segments (by 2 points) */
+  BZ6_RND_PRIM_POINTS,   /* Arrauy of points */
+} bz6PRIM_TYPE;
+
+/* Primitive representation type */
 typedef struct tagbz6PRIM
 {
   INT
-    VA,   /* Vertex arrray */
-    VBuf, /* Vertex buffer */
-    IBuf; /* Indexes buffer */
-  INT NumOfElements;   /* Number of elements */
+    VA,              /* Vertex array Id */
+    VBuf,            /* Vertex buffer Id */
+    IBuf;            /* Index buffer Id (if 0 - use only vertex buffer) */
+  INT NumOfElements; /* Number of indices/vecrtices */
 
+  bz6PRIM_TYPE Type; /* Primitive type */
   MATR Trans;   /* Additional transformation matrix */
+  INT MtlNo;
 } bz6PRIM;
 
 /* Forward declaration */
@@ -140,7 +156,7 @@ VOID BZ6_RndEnd( VOID );
  *       INT NumOfI;
  * RETURNS: None.
  */
-VOID BZ6_RndPrimCreate( bz6PRIM *Pr, bz6VERTEX *V, INT NumOfV, INT *I, INT NumOfI );
+VOID BZ6_RndPrimCreate( bz6PRIM *Pr, bz6PRIM_TYPE Type, bz6VERTEX *V, INT NumOfV, INT *I, INT NumOfI );
 
 /* Rendering free primitive function.
  * ARGUMENTS:
@@ -232,6 +248,60 @@ BOOL BZ6_RndPrimLoad( bz6PRIM *Pr, CHAR *FileName );
  *   NONE.
  */
 VOID BZ6_RndPrimCreateBase( bz6PRIM *Pr, VEC Position, VEC DirectionWeird, VEC DirectionHeight, DBL BaseWeird, DBL BaseHeight, INT SplitW, INT SplitH );
+
+/***
+ * Primitive collection support
+ ***/
+
+/* Primitive collection data type */
+typedef struct tagbz6PRIMS
+{
+  INT NumOfPrims; /* Number of primitives in array */  
+  bz6PRIM *Prims; /* Array of primitives */
+  MATR Trans;     /* Common transformation matrix */
+} bz6PRIMS;
+
+/* Create array of primitives function.
+ * ARGUMENTS:
+ *   - pointer to primitives structure:
+ *       bz6PRIMS *Prs;
+ *   - number of primitives to be add:
+ *       INT NumOfPrims;
+ * RETURNS:
+ *   (BOOL) TRUE if successful, FALSE otherwise.
+ */
+BOOL BZ6_RndPrimsCreate( bz6PRIMS *Prs, INT NumOfPrims );
+
+/* Delete array of primitives function.
+ * ARGUMENTS:
+ *   - pointer to primitives structure:
+ *       bz6PRIMS *Prs;
+ * RETURNS: None.
+ */
+VOID BZ6_RndPrimsFree( bz6PRIMS *Prs );
+
+/* Draw array of primitives function.
+ * ARGUMENTS:
+ *   - pointer to primitives structure:
+ *       bz6PRIMS *Prs;
+ *   - global transformation matrix:
+ *       MATR World;
+ * RETURNS: None.
+ */
+VOID BZ6_RndPrimsDraw( bz6PRIMS *Prs, MATR World );
+
+/* Load array of primitives from .G3DM file function.
+ * ARGUMENTS:
+ *   - pointer to primitives structure:
+ *       bz6PRIMS *Prs;
+ *   - file name:
+ *       CHAR *FileName;
+ * RETURNS:
+ *   (BOOL) TRUE if successful, FALSE otherwise.
+ */
+BOOL BZ6_RndPrimsLoad( bz6PRIMS *Prs, CHAR *FileName );
+
+
 
 #endif /* __rnd_h_ */
 

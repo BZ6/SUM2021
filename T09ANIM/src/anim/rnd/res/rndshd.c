@@ -27,7 +27,7 @@ VOID BZ6_RndShdLog( CHAR *FileNamePrefix, CHAR *ShaderName, CHAR *Text )
 {
   FILE *F;
 
-  if ((F = fopen("BIN/SHADERS/shd{30}vg4.log", "a")) == NULL)
+  if ((F = fopen("BIN/SHADERS/shd{30}bz6.log", "a")) == NULL)
     return;
   fprintf(F, "%s : %s\n%s\n\n", FileNamePrefix, ShaderName, Text);
   fclose(F);
@@ -213,7 +213,7 @@ INT BZ6_RndShadersSize;
 VOID BZ6_RndShadersInit( VOID )
 {
   BZ6_RndShadersSize = 0;
-  BZ6_RndShaderAdd("COW");
+  BZ6_RndShaderAdd("DEFAULT");
 } /* End of 'BZ6_RndShadersInit' function */
 
 /* Shader stock deinitialization function.

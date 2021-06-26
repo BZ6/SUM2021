@@ -77,12 +77,12 @@ INT IsGameRestart( VOID )
 {
   static BOOL Is_Play;
 
-  if (CountFirst == 2 && !Is_Play)
+  if (CountFirst == 10 && !Is_Play)
   {
     Is_Play = !Is_Play;
     return WM_CLOSE;
   }
-  if (CountSecond == 2 && !Is_Play)
+  if (CountSecond == 10 && !Is_Play)
   {
     Is_Play = !Is_Play;
     return WM_CLOSE;

@@ -20,7 +20,6 @@ INT BZ6_RndTexturesSize;                      /* Textures array store size */
 BZ6_RndTexInit( VOID )
 {
   BZ6_RndTexturesSize = 0;
-  BZ6_RndTextureAddFromFile("X:/PICS/BRICK.G24");
 } /* End of 'BZ6_RndTexInit' function */
 
 /* Texture image add in stock function.
@@ -34,7 +33,7 @@ BZ6_RndTexInit( VOID )
  * RETURNS:
  *   (INT) texture number.
  */
-INT BZ6_RndTextureAddImg( CHAR *Name, INT W, INT H, VOID *Bits )
+INT BZ6_RndTextureAddImg( CHAR *Name, INT W, INT H, INT C, VOID *Bits )
 {
   INT n;
 
@@ -48,14 +47,14 @@ INT BZ6_RndTextureAddImg( CHAR *Name, INT W, INT H, VOID *Bits )
   n = log(W > H ? W : H) / log(2);
   n = n < 1 ? 1 : n;
 
-  glTexStorage2D(GL_TEXTURE_2D, n, GL_RGB8, W, H);
+  glTexStorage2D(GL_TEXTURE_2D, n, C == 4 ? GL_RGBA8 : C == 3 ? GL_RGB8 : GL_R8, W, H);
   glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, W, H,
-                      GL_BGR, GL_UNSIGNED_BYTE, Bits);
+                      C == 4 ? GL_RGBA : C == 3 ? GL_RGB : GL_LUMINANCE, GL_UNSIGNED_BYTE, Bits);
 
   /* Upload texture */
-  glGenerateMipmap(GL_TEXTURE_2D);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glGenerateMipmap(GL_TEXTURE_2D);             
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
@@ -68,32 +67,24 @@ INT BZ6_RndTextureAddImg( CHAR *Name, INT W, INT H, VOID *Bits )
   return BZ6_RndTexturesSize++;
 } /* End of 'BZ6_RndTextureAddImg' function */
 
+/* Texture image add from file function.
+ * ARGUMENTS:
+ *   - name of image:
+ *       CHAR *FileName; 
+ * RETURNS:
+ *   (INT) texture number.
+ */
 INT BZ6_RndTextureAddFromFile( CHAR *FileName )
 {
-  BYTE *img;
-  INT w, h;
-  FILE *F;
-  
-  if ((F = fopen(FileName, "rb")) == NULL)
-    return -1;
-  fread(&w, 2, 1, F);
-  fread(&h, 2, 1, F);
+   return -1;
+} /* End of 'BZ6_RndTextureAddFromFile' function */
 
-  if ((img = malloc(3 * w * h)) == NULL)
-  {
-    fclose(F);
-    return -1;
-  }
-
-  fread(img, 3, w * h, F);
-
-  BZ6_RndTextureAddImg(FileName, w, h, (VOID *)img);
-
-  free(img);
-  fclose(F);
-  return BZ6_RndTexturesSize - 1;
-}
-
+/* Texture delete in stock function.
+ * ARGUMENTS:
+ *   - texture number:
+ *       INT TexNo; 
+ * RETURNS: NONE.
+ */
 VOID BZ6_RndTextureDelete( INT TexNo )
 {
   if (TexNo < 0 || TexNo >= BZ6_RndTexturesSize)
@@ -101,16 +92,18 @@ VOID BZ6_RndTextureDelete( INT TexNo )
   glDeleteTextures(1, &BZ6_RndTextures[TexNo].TexId);
 
   BZ6_RndTexturesSize--;
-}
+} /* End of 'BZ6_RndTextureDelete' function */
 
+/* Texture close function.
+ * ARGUMENTS: NONE; 
+ * RETURNS: NONE.
+ */
 VOID BZ6_RndTexClose( VOID )
 {
   INT i;
 
   for (i = 0; i < BZ6_RndTexturesSize; i++)
-    BZ6_RndTextureDelete(i);
-
-  BZ6_RndTexturesSize = 0;
-}
+    glDeleteTextures(1, &BZ6_RndTextures[i].TexId);
+} /* End of 'BZ6_RndTexClose' function */
 
 /* END OF 'rndtxt.c' FILE */

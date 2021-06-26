@@ -7,6 +7,7 @@
 #include "units.h"
 
 VEC PosCowFirst;
+VEC veFirst;
 INT CountFirst;
 
 typedef struct
@@ -33,13 +34,14 @@ static FLT Distance( VEC PositionCircle, VEC PositionObject )
  */
 static VOID BZ6_UnitInit( bz6UNIT_COW *Uni, bz6ANIM *Ani )
 {
+  veFirst = VecSet1(0);
   BZ6_RndPrimLoad(&Uni->Pr, "BIN/MODELS/cow.obj");
   Uni->IsDvig = FALSE;
-  PosCowFirst = VecSet(1, 0, 5);
+  PosCowFirst = VecSet(3, 0, 5);
   Uni->Dir = VecSet(0, 0 ,-1);
   Uni->Cow = MatrMulMatr(MatrScale(VecSet1(0.1)), MatrRotateY(90));
   BZ6_RndShadersClose();
-  BZ6_RndShaderAdd("COW");
+  BZ6_RndShaderAdd("DEFAULT");
 } /* End of 'BZ6_UnitInit' function */
 
 /* Unit cow inter frame events handle function.
@@ -55,10 +57,10 @@ static VOID BZ6_UnitResponse( bz6UNIT_COW *Uni, bz6ANIM *Ani )
   VEC ve;
 
   Uni->IsDvig = FALSE;
-
   Uni->Cow = MatrMulMatr(Uni->Cow, MatrRotate(Ani->DeltaTime * 400 * (Ani->Keys['A']- Ani->Keys['D']), VecSet(0, 1, 0)));
   Uni->Dir = VectorTransform(Uni->Dir, MatrRotate(Ani->DeltaTime * 400 * (Ani->Keys['A']- Ani->Keys['D']), VecSet(0, 1, 0)));
-  ve = VecAddVec(PosCowFirst, VecMulNum(Uni->Dir, Ani->DeltaTime * 50 * (Ani->Keys['W']- Ani->Keys['S'])));
+  veFirst = VecMulNum(Uni->Dir, Ani->DeltaTime * 50 * (Ani->Keys['W'] - Ani->Keys['S']));
+  ve = VecAddVec(PosCowFirst, veFirst);
 
   if (ve.X < 47.5 && ve.X > -48.5 && ve.Z < 47.5 && ve.Z > -48.5)
     if (Distance(VecSet(3.5 + RandomNumberX, 0, RandomNumberZ), ve) > 2.6 && Distance(VecSet(-3.5 + RandomNumberX, 0, RandomNumberZ), ve) > 2.6)

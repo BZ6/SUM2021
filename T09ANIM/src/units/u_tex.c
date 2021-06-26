@@ -31,22 +31,7 @@ static VOID BZ6_UnitInit( bz6UNIT_TEX *Uni, bz6ANIM *Ani )
     {{0, 1, 0}, {0, 1}, {0, 0, 1}, {1, 1, 1, 1}},
     {{1, 1, 0}, {1, 1}, {0, 0, 1}, {1, 1, 1, 1}},
   };
-  FLT t[2][2] =
-  {
-    {0.8, 1},
-    {1, 0.3}
-  };
-
-  glGenTextures(1, &Uni->TexId);
-
-  glBindTexture(GL_TEXTURE_2D, Uni->TexId);
-  glTexImage2D(GL_TEXTURE_2D, 0, 1, 2, 2, 0, GL_LUMINANCE, GL_FLOAT, t);
-
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  Uni->TexId = BZ6_RndTextureAddFromFile("X:/PICS/BRICK.G24");
 
   BZ6_RndPrimCreateGrid(&Uni->Pr, 2, 2, V);
 } /* End of 'BZ6_UnitInit' function */
