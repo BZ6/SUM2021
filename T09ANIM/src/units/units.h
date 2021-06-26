@@ -9,12 +9,14 @@
 
 #include "../anim/anim.h"
 
-extern VEC PosCowSecond;
-extern VEC PosCowFirst;
-extern INT CountFirst;
-extern INT CountSecond;
-extern INT RandomNumberX;
-extern INT RandomNumberZ;
+extern VEC 
+  veFirst,
+  veSecond;
+extern INT 
+  CountFirst,
+  CountSecond,
+  RandomNumberX,
+  RandomNumberZ;
 
 /* Unit ball creation function.
  * ARGUMENTS: None.
@@ -80,6 +82,13 @@ bz6UNIT * BZ6_UnitCreateFence( VOID );
 bz6UNIT * BZ6_UnitCreateTex( VOID );
 
 bz6UNIT * BZ6_UnitCreateCowRandom( VOID );
+
+/* Unit ball creation function.
+ * ARGUMENTS: None.
+ * RETURNS:
+ *   (bz6UNIT *) pointer to created unit.
+ */
+bz6UNIT * BZ6_UnitCreateObject( VOID );
 
 #endif /* __units_h_ */
 
