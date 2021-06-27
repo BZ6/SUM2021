@@ -70,13 +70,13 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, CHAR *CmdLine,
   UpdateWindow(hWnd);
 
   BZ6_AnimAddUnit(BZ6_UnitCreateCtrl());
-  //BZ6_AnimAddUnit(BZ6_UnitCreatePlane());
-  //BZ6_AnimAddUnit(BZ6_UnitCreateTorus());
-  //BZ6_AnimAddUnit(BZ6_UnitCreateFence());
+  BZ6_AnimAddUnit(BZ6_UnitCreatePlane());
+  BZ6_AnimAddUnit(BZ6_UnitCreateTorus());
+  BZ6_AnimAddUnit(BZ6_UnitCreateFence());
   //BZ6_AnimAddUnit(BZ6_UnitCreateTex());
-  //BZ6_AnimAddUnit(BZ6_UnitCreateCow());
-  //BZ6_AnimAddUnit(BZ6_UnitCreateCowRandom());
-  BZ6_AnimAddUnit(BZ6_UnitCreateObject());
+  BZ6_AnimAddUnit(BZ6_UnitCreateCow());
+  BZ6_AnimAddUnit(BZ6_UnitCreateCowRandom());
+  //BZ6_AnimAddUnit(BZ6_UnitCreateObject());
 
   /* Message loop */
   while (TRUE)

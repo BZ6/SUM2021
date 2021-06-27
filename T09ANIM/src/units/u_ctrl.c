@@ -27,9 +27,9 @@ typedef struct
  */
 static VOID BZ6_UnitInit( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
 {
-  Uni->Pos = VecSet(0, 10, 50);
-  Uni->CamDir = VecSet(0, 0, -5);
-  Uni->CamRight = VecSet(5, 0, 0);
+  Uni->Pos = VecSet(0, 100, 1);
+  Uni->CamDir = VecSet(0, -100, -1);
+  Uni->CamRight = VecSet(100, 0, 1);
   Uni->Speed = 2;
   Uni->AngleSpeed = 90;
 } /* End of 'BZ6_UnitInit' function */
@@ -70,6 +70,7 @@ static VOID BZ6_UnitResponse( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
       Ani->GlobalDeltaTime * Uni->AngleSpeed * Ani->Mdx));
 
   /* Joystick */
+  /***
   Uni->CamDir = VectorTransform(Uni->CamDir, MatrRotate(-Ani->GlobalDeltaTime * Uni->AngleSpeed * Ani->JY, Uni->CamRight));
 
   Uni->CamRight = VectorTransform(Uni->CamRight, MatrRotate(-Ani->GlobalDeltaTime * Uni->AngleSpeed * Ani->JX, VecSet(0, 1, 0)));
@@ -82,6 +83,7 @@ static VOID BZ6_UnitResponse( bz6UNIT_CTRL *Uni, bz6ANIM *Ani )
   Uni->Pos =
     VecAddVec(Uni->Pos,
     VecMulNum(Uni->CamDir, -Ani->GlobalDeltaTime * Uni->Speed * Ani->JZ));
+   ***/
 
   /* Keyboard */
   Uni->Pos = VecAddVec(Uni->Pos, VecMulNum(Uni->CamDir, Ani->DeltaTime * Uni->Speed * (Ani->Keys[VK_NUMPAD8] - Ani->Keys[VK_NUMPAD5])));

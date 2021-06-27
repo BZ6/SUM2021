@@ -9,6 +9,10 @@
 
 #include "rnd/rnd.h"
 
+extern VEC 
+  PosCowFirst,
+  PosCowSecond;
+
 typedef struct tagbz6UNIT bz6UNIT;
 typedef struct tagbz6ANIM bz6ANIM;
 
