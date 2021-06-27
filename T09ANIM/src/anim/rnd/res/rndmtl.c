@@ -4,7 +4,7 @@
  * PURPOSE   : WinAPI Animation startup module
  */
 
-#include "rndres.h"
+#include "../../anim.h"
 
 static struct
 {
@@ -40,16 +40,19 @@ static struct
 bz6MATERIAL BZ6_RndMaterials[BZ6_MAX_MATERIALS];
 INT BZ6_RndMaterialsSize;
 
+bz6MATERIAL * BZ6_RndMtlGet( INT MtlNo )
+{
+  if (MtlNo < 0 || MtlNo >= BZ6_RndMaterialsSize)
+    MtlNo = 0;
+  return &BZ6_RndMaterials[MtlNo];
+}
 
 INT BZ6_RndMtlApply( INT MtlNo )
 {
   INT prg, loc, i;
   bz6MATERIAL *mtl;
-
-  /* Set material pointer */
-  if (MtlNo < 0 || MtlNo >= BZ6_RndMaterialsSize)
-    MtlNo = 0;
-  mtl = &BZ6_RndMaterials[MtlNo];
+  
+  mtl = BZ6_RndMtlGet(MtlNo);
 
   /* Set shader program Id */
   prg = mtl->ShdNo;
@@ -87,22 +90,11 @@ INT BZ6_RndMtlApply( INT MtlNo )
   return prg;
 } /* End of 'BZ6_RndMtlApply' function */
 
-bz6MATERIAL * BZ6_RndMtlGet( INT MtlNo )
-{
-  if (MtlNo < 0 || MtlNo >= BZ6_RndMaterialsSize)
-    MtlNo = 0;
-  return &BZ6_RndMaterials[MtlNo];
-}
+
 
 INT BZ6_RndMaterialAdd( bz6MATERIAL *Mtl )
 {
-  INT i;
-
-  for (i = 0; i < BZ6_RndMaterialsSize; i++)
-    if (strcmp(BZ6_RndMaterials[i].Name, Mtl->Name) == 0)
-      break;
-
-  if (i >= 10)
+  if (BZ6_RndMaterialsSize >= BZ6_STR_MAX)
     return -1;
 
   BZ6_RndMaterials[BZ6_RndMaterialsSize] = *Mtl;
@@ -116,6 +108,7 @@ bz6MATERIAL MtlGetDef( VOID )
 
 VOID BZ6_RndMtlInit( VOID )
 {
+  INT i;
   bz6MATERIAL mtl;
 
   strcpy(mtl.Name, "DEFAULT");
@@ -128,6 +121,9 @@ VOID BZ6_RndMtlInit( VOID )
 
   mtl.Trans = 1;
   mtl.ShdNo = 0;
+
+  for (i = 0; i < 8; i++)
+    mtl.Tex[i] = -1;
 
   BZ6_RndMaterialsSize = 0;
   BZ6_RndMaterialAdd(&mtl);

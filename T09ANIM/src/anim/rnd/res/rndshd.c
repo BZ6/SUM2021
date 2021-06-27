@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "rndres.h"
+#include "../../anim.h"
 
 /* Shader stock array and it size */
 bz6SHADER BZ6_RndShaders[BZ6_MAX_SHADERS];

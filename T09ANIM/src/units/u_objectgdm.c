@@ -23,7 +23,11 @@ typedef struct
  */
 static VOID BZ6_UnitInit( bz6UNIT_G3DM *Uni, bz6ANIM *Ani )
 {
+  bz6MATERIAL mtl = MtlGetDef();
+
   BZ6_RndPrimsLoad(&Uni->Prs, "BIN/MODELS/uh60.g3dm");
+  mtl.ShdNo = BZ6_RndShaderAdd("DEFAULT");
+  Uni->Prs.Prims->MtlNo = BZ6_RndMaterialAdd(&mtl);
   Uni->Pos = VecSet1(0);
 } /* End of 'BZ6_UnitInit' function */
 

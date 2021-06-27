@@ -10,7 +10,7 @@
 #define GLEW_STATIC
 #include <glew.h>
 
-#include "../../def.h"
+#include "res/rndres.h"
 
 #include <wglew.h>
 #include <gl/wglext.h>

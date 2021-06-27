@@ -102,6 +102,7 @@ VOID BZ6_RndPrimDraw( bz6PRIM *Pr, MATR World )
                    Pr->Type == BZ6_RND_PRIM_TRISTRIP ? GL_TRIANGLE_STRIP :
                    GL_POINTS;
 
+  BZ6_RndMtlApply(Pr->MtlNo);
 
   glUseProgram(ProgId);
 

@@ -7,7 +7,7 @@
 #ifndef __anim_h_
 #define __anim_h_
 
-#include "rnd/res/rndres.h"
+#include "rnd/rnd.h"
 
 typedef struct tagbz6UNIT bz6UNIT;
 typedef struct tagbz6ANIM bz6ANIM;

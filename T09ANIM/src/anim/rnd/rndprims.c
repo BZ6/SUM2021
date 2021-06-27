@@ -194,6 +194,6 @@ BOOL BZ6_RndPrimsLoad( bz6PRIMS *Prs, CHAR *FileName )
 
   free(mem);
   return TRUE;
-} /* End of 'BZ6_RndPrimsDraw' function */
+} /* End of 'BZ6_RndPrimsLoad' function */
 
 /* END OF 'rndprims.c' FILE */

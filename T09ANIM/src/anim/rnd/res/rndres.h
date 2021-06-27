@@ -7,7 +7,7 @@
 #ifndef __rndres_h_
 #define __rndres_h_
 
-#include "../rnd.h"
+#include "../../../def.h"
 
 /* Maximum elements in string */
 #define BZ6_STR_MAX 100
@@ -153,6 +153,7 @@ INT BZ6_RndMtlApply( INT MtlNo );
 INT BZ6_RndMaterialAdd( bz6MATERIAL *Mtl );
 VOID BZ6_RndMtlInit( VOID );
 VOID BZ6_RndMtlClose( VOID );
+bz6MATERIAL MtlGetDef( VOID );
 
 /***
  * Resourses functions

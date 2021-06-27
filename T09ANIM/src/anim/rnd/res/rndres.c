@@ -4,7 +4,7 @@
  * PURPOSE   : WinAPI Animation startup module
  */
 
-#include "rndres.h"
+#include "../../anim.h"
 
 VOID BZ6_RndResInit( VOID )
 {

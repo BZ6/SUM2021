@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "rndres.h"
+#include "../../anim.h"
 
 /* Texture stock array and it size */
 bz6TEXTURE BZ6_RndTextures[BZ6_MAX_TEXTURES]; /* Array of textures */
