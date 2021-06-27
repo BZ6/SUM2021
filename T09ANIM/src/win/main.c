@@ -163,7 +163,7 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
   case WM_CLOSE:
     if (CountFirst == 10)
     { 
-      sprintf(Buf, "Player 1: %i\nPlayer 2: %i\nThe Player 1 win\nWant to try again?", CountFirst, CountSecond);
+      sprintf(Buf, "Player yellow: %i\nPlayer blue: %i\nThe Player yellow win.\nWant to try again?", CountFirst, CountSecond);
       if (MessageBox(hWnd, Buf, "Game Over", MB_RETRYCANCEL | MB_ICONQUESTION ) == IDRETRY)
       {
         srand(30);
@@ -177,7 +177,7 @@ LRESULT CALLBACK BZ6_WinFunc( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam 
     }
     if (CountSecond == 10)
     {
-      sprintf(Buf, "Player 1: %i\nPlayer 2: %i\nThe Player 2 win\nWant to try again?", CountFirst, CountSecond);
+      sprintf(Buf, "Player yellow: %i\nPlayer blue: %i\nThe Player blue win.\nWant to try again?", CountFirst, CountSecond);
       if (MessageBox(hWnd, Buf, "Game Over", MB_RETRYCANCEL | MB_ICONQUESTION ) == IDRETRY)
       {
         srand(30);
